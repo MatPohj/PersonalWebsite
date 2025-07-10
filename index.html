@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Website</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="#about">About</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section id="hero">
+            <h1>greetings from masa!</h1>
+            <p>I'm a 21 year old student from Vantaa Finland. Currently I'm enrolling as an it BBA student at Haaga-Helia. I like to 
+                tinker with technology. I'm really into Cybersecurity where I'm currently seeking to expand my knowledge and skills.
+            </p>
+        </section>
+        <section id="about">
+            <h2>About Me</h2>
+            <div class="about-container">
+                <div class="tabs">
+                    <button class="tab-button active" data-tab="education">Education</button>
+                    <button class="tab-button" data-tab="work">Work</button>
+                </div>
+                <div class="tab-content">
+                    <div id="education" class="content-box">
+                        <div class="education-entry">
+                            <span class="education-date">Jan 2024 - Present</span>
+                            <h3>Haaga-Helia, BBA IT</h3>
+                            <p>First focused my studies in Software development and now focusing on learning Cybersecurity.</p>
+                            <h4>Activities</h4>
+                            <ul>
+                                <li>Tech support at the 2024 Autumn UAS exam</li>
+                            </ul>
+                            <h4>Important courses</h4>
+                            <ul>
+                                <li>Software Project 1</li>
+                                <li>Course on both back/frontend development</li>
+                                <li>Basics/Intermediate of java and python</li>
+                                <li>SQL</li>
+                                <li>AWS</li>
+                            </ul>
+                            <h4>Currently enrolling courses</h4>
+                            <ul>
+                                <li>Software Project 2</li>
+                                <li>Advanced Java</li>
+                            </ul>
+                        </div>
+                        <div class="education-entry">
+                            <span class="education-date">2019 - 2022</span>
+                            <h3>Apollon yhteiskoulu Finnish Matriculation examination</h3>
+                            <p>Completed the Finnish Matriculation examination with a focus on math and science.</p>
+                        </div>
+                    </div>
+                    <div id="work" class="content-box" style="display: none;">
+                        <p>This is where you can write about your work experience.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="projects">
+            <h2>My Projects</h2>
+            <p>This is where you can showcase your projects.</p>
+        </section>
+        <section id="contact">
+            <h2>Contact Me</h2>
+            <p>This is where you can add your contact information.</p>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2025 Matti Pohjanoksa</p>
+    </footer>
+    <script src="js/script.js"></script>
+</body>
+</html>
