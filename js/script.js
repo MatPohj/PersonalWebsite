@@ -11,28 +11,33 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 });
 
 document.addEventListener('DOMContentLoaded', function() {
-    const toggleBtn = document.getElementById('theme-toggle');
-    if (!toggleBtn) return;
-    const body = document.body;
-    let isLight = body.classList.contains('light-mode');
+    // Tab switching logic
+    function initTabs() {
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const contentBoxes = document.querySelectorAll('.content-box');
 
-    function setTheme(light) {
-        if (light) {
-            body.classList.add('light-mode');
-            toggleBtn.textContent = '🌑';
-            toggleBtn.setAttribute('aria-label', 'Switch to dark mode');
-        } else {
-            body.classList.remove('light-mode');
-            toggleBtn.textContent = '🌙';
-            toggleBtn.setAttribute('aria-label', 'Switch to light mode');
-        }
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all buttons
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                // Add active class to clicked button
+                button.classList.add('active');
+
+                // Hide all content boxes
+                contentBoxes.forEach(box => box.classList.remove('active'));
+                
+                // Show the selected content box
+                const tabId = button.getAttribute('data-tab');
+                const content = document.getElementById(tabId);
+                if (content) {
+                    content.classList.add('active');
+                }
+            });
+        });
     }
 
-    toggleBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        isLight = !isLight;
-        setTheme(isLight);
-    });
+    // Initialize tabs
+    initTabs();
 
     // Tab switching logic
     const tabButtons = document.querySelectorAll('.tab-button');
@@ -43,11 +48,8 @@ document.addEventListener('DOMContentLoaded', function() {
             tabButtons.forEach(b => b.classList.remove('active'));
             this.classList.add('active');
             contentBoxes.forEach(box => box.classList.remove('active'));
-            if (this.dataset.tab === 'education') {
-                document.getElementById('education').classList.add('active');
-            } else if (this.dataset.tab === 'work') {
-                document.getElementById('work-experience').classList.add('active');
-            }
+            const targetId = this.dataset.tab;
+            document.getElementById(targetId).classList.add('active');
         });
     });
 });
