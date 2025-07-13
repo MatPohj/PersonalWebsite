@@ -5,5 +5,68 @@
     "date": "2025-07-10",
     "excerpt": "This is the first post on my new blog. Here I'll share thoughts on technology, cybersecurity, and my personal projects.",
     "file": "test.md"
+  },
+  {
+    "id": "dummy1",
+    "title": "Dummy Post 1",
+    "date": "2025-07-09",
+    "excerpt": "This is a dummy excerpt for post 1.",
+    "file": "dummy1.md"
+  },
+  {
+    "id": "dummy2",
+    "title": "Dummy Post 2",
+    "date": "2025-07-08",
+    "excerpt": "This is a dummy excerpt for post 2.",
+    "file": "dummy2.md"
+  },
+  {
+    "id": "dummy3",
+    "title": "Dummy Post 3",
+    "date": "2025-07-07",
+    "excerpt": "This is a dummy excerpt for post 3.",
+    "file": "dummy3.md"
+  },
+  {
+    "id": "dummy4",
+    "title": "Dummy Post 4",
+    "date": "2025-07-06",
+    "excerpt": "This is a dummy excerpt for post 4.",
+    "file": "dummy4.md"
+  },
+  {
+    "id": "dummy5",
+    "title": "Dummy Post 5",
+    "date": "2025-07-05",
+    "excerpt": "This is a dummy excerpt for post 5.",
+    "file": "dummy5.md"
+  },
+  {
+    "id": "dummy6",
+    "title": "Dummy Post 6",
+    "date": "2025-07-04",
+    "excerpt": "This is a dummy excerpt for post 6.",
+    "file": "dummy6.md"
+  },
+  {
+    "id": "dummy7",
+    "title": "Dummy Post 7",
+    "date": "2025-07-03",
+    "excerpt": "This is a dummy excerpt for post 7.",
+    "file": "dummy7.md"
+  },
+  {
+    "id": "dummy8",
+    "title": "Dummy Post 8",
+    "date": "2025-07-02",
+    "excerpt": "This is a dummy excerpt for post 8.",
+    "file": "dummy8.md"
+  },
+  {
+    "id": "dummy9",
+    "title": "Dummy Post 9",
+    "date": "2025-07-01",
+    "excerpt": "This is a dummy excerpt for post 9.",
+    "file": "dummy9.md"
   }
 ]

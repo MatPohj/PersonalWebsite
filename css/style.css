@@ -86,10 +86,10 @@ main {
 #hero {
     text-align: center;
     padding: 5em 2em;
-    background: linear-gradient(120deg, #0a1120 60%, #10131a 100%);
+    background: linear-gradient(300deg, #394764 60%, #4764b6 100%);
     border-radius: 15px;
     margin: 1em;
-    border: 1px solid #10131a;
+    border: 1px solid #6fa8ff;
 }
 
 #hero h1 {
@@ -108,10 +108,10 @@ section {
 }
 
 .about-container {
-    border: 1px solid #10131a;
+    border: 1px solid #31447a;
     border-radius: 15px; /* More rounded corners */
     overflow: hidden;
-    background: linear-gradient(120deg, #0a1120 60%, #10131a 100%);
+    background: linear-gradient(120deg, #39445f 60%, #31447a 100%);
 }
 
 /* Tab styles */
@@ -213,9 +213,9 @@ section {
 
 /* Unified entry box for both work and education (school) */
 .entry-box {
-    border: 1px solid #10131a;
+    border: 1px solid #31447a;
     border-radius: 15px;
-    background: linear-gradient(120deg, #0a1120 60%, #10131a 100%);
+    background: linear-gradient(120deg, #364463 60%, #31447a 100%);
     margin-bottom: 2em;
     padding: 25px;
     transition: opacity 0.4s ease-in-out;
@@ -450,10 +450,13 @@ body.light-mode .work-title {
 }
 
 .blog-post {
-    border: 1px solid #10131a;
+    border: 1px solid #31447a;
     border-radius: 15px;
-    background: linear-gradient(120deg, #0a1120 60%, #10131a 100%);
+    background: linear-gradient(120deg, #232e4a 60%, #31447a 100%);
     padding: 25px;
+}
+body {
+    background: linear-gradient(120deg, #232e4a 60%, #7dbbff 100%) !important;
 }
 
 .blog-post-header {
