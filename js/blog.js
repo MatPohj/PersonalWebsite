@@ -4,7 +4,12 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Load the blog posts metadata with the correct relative path
     fetch(`${basePath}blogs/metadata.json`)
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
         .then(posts => {
             displayBlogList(posts);
             
@@ -21,20 +26,21 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .catch(error => {
             console.error('Error loading blog posts:', error);
-            document.getElementById('blog').innerHTML += '<p>Error loading blog posts. Please try again later.</p>';
+            document.getElementById('blog').innerHTML += `<p>Error loading blog posts: ${error.message}</p>`;
         });
 });
 
 // Helper function to get the correct base path
 function getBasePath() {
-    // Get the pathname and split it
-    const pathSegments = window.location.pathname.split('/');
+    const path = window.location.pathname;
     
-    // Remove the last segment (current file)
-    pathSegments.pop();
+    // Check if we're in the blog directory
+    if (path.includes('/blog/') || path.endsWith('/blog')) {
+        return '../';
+    }
     
-    // Join the remaining segments and add a trailing slash
-    return pathSegments.join('/') + '/';
+    // We're in the root directory
+    return './';
 }
 
 function displayBlogList(posts) {
@@ -60,9 +66,9 @@ function displayBlogList(posts) {
         entryBox.className = 'entry-box blog-entry';
         entryBox.innerHTML = `
             <span class="entry-date">${formatDate(post.date)}</span>
-            <h3><a href="blog.html?post=${post.id}" class="blog-title">${post.title}</a></h3>
+            <h3><a href="?post=${post.id}" class="blog-title">${post.title}</a></h3>
             <p>${post.excerpt}</p>
-            <a href="blog.html?post=${post.id}" class="read-more">Read more</a>
+            <a href="?post=${post.id}" class="read-more">Read more</a>
         `;
         blogSection.appendChild(entryBox);
     });
@@ -85,7 +91,7 @@ function loadBlogPost(post, basePath) {
             
             // Add back button
             const backLink = document.createElement('a');
-            backLink.href = 'blog.html';
+            backLink.href = '.';  // Change from 'blog.html' to '.'
             backLink.className = 'back-link';
             backLink.innerHTML = '&larr; Back to all posts';
             blogSection.appendChild(backLink);
