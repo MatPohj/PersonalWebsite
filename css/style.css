@@ -400,6 +400,139 @@ body.light-mode .work-title {
     color: #222 !important;
 }
 
+/* Blog styles */
+.blog-entry {
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+}
+
+.blog-entry:hover {
+    transform: translateY(-3px);
+}
+
+.blog-title {
+    color: #4fa3ff;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.blog-title:hover {
+    color: #ffffff;
+    text-decoration: underline;
+}
+
+.read-more {
+    display: inline-block;
+    margin-top: 0.8em;
+    color: #4fa3ff;
+    text-decoration: none;
+    font-size: 0.9em;
+    font-weight: 600;
+    transition: color 0.2s;
+}
+
+.read-more:hover {
+    color: #ffffff;
+    text-decoration: underline;
+}
+
+.back-link {
+    display: inline-block;
+    margin-bottom: 1.5em;
+    color: #4fa3ff;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s;
+}
+
+.back-link:hover {
+    color: #ffffff;
+}
+
+.blog-post {
+    border: 1px solid #10131a;
+    border-radius: 15px;
+    background: linear-gradient(120deg, #0a1120 60%, #10131a 100%);
+    padding: 25px;
+}
+
+.blog-post-header {
+    margin-bottom: 2em;
+    border-bottom: 1px solid rgba(79, 163, 255, 0.2);
+    padding-bottom: 1em;
+}
+
+.blog-post-header h1 {
+    margin: 0 0 0.3em 0;
+    color: #ffffff;
+}
+
+.blog-post-content {
+    line-height: 1.8;
+}
+
+.blog-post-content h2 {
+    color: #4fa3ff;
+    margin-top: 1.5em;
+}
+
+.blog-post-content p {
+    margin: 1em 0;
+}
+
+.blog-post-content img {
+    max-width: 100%;
+    border-radius: 8px;
+    margin: 1em 0;
+}
+
+.blog-post-content a {
+    color: #4fa3ff;
+    text-decoration: none;
+}
+
+.blog-post-content a:hover {
+    text-decoration: underline;
+}
+
+.loading-spinner {
+    text-align: center;
+    padding: 2em;
+    color: #a0a0a0;
+}
+
+/* Light mode blog styles */
+body.light-mode .blog-title {
+    color: #1976d2 !important;
+}
+
+body.light-mode .blog-title:hover {
+    color: #0d47a1 !important;
+}
+
+body.light-mode .read-more,
+body.light-mode .back-link {
+    color: #1976d2 !important;
+}
+
+body.light-mode .read-more:hover,
+body.light-mode .back-link:hover {
+    color: #0d47a1 !important;
+}
+
+body.light-mode .blog-post {
+    background: #fff !important;
+    border-color: #c3cfe2 !important;
+}
+
+body.light-mode .blog-post-header h1 {
+    color: #1976d2 !important;
+}
+
+body.light-mode .blog-post-content h2 {
+    color: #1976d2 !important;
+}
+
 /* Responsive styles */
 @media (max-width: 600px) {
     header, footer {
