@@ -24,6 +24,13 @@
     <main class="container">
         <section id="blog">
             <h1>Blog</h1>
+            <div class="sort-controls">
+                <label for="sort-select">Sort by date:</label>
+                <select id="sort-select">
+                    <option value="desc">Newest first</option>
+                    <option value="asc">Oldest first</option>
+                </select>
+            </div>
             <!-- Blog posts will be loaded here dynamically -->
             <div class="loading-spinner">Loading posts...</div>
         </section>
