@@ -1,3 +1,6 @@
+// Global variable to store all posts
+let allPosts = [];
+
 document.addEventListener('DOMContentLoaded', function() {
     // Get base path for GitHub Pages compatibility
     const basePath = getBasePath();
@@ -11,7 +14,11 @@ document.addEventListener('DOMContentLoaded', function() {
             return response.json();
         })
         .then(posts => {
+            allPosts = posts; // Store posts globally
             displayBlogList(posts);
+            
+            // Set up sort functionality
+            setupSortControls();
             
             // Check if a specific blog post is requested via URL parameter
             const urlParams = new URLSearchParams(window.location.search);
@@ -43,16 +50,48 @@ function getBasePath() {
     return './';
 }
 
-function displayBlogList(posts) {
+function setupSortControls() {
+    const sortSelect = document.getElementById('sort-select');
+    if (sortSelect) {
+        sortSelect.addEventListener('change', function() {
+            const sortOrder = this.value;
+            displayBlogList(allPosts, sortOrder);
+        });
+    }
+}
+
+function sortPosts(posts, order = 'desc') {
+    // Separate pinned and regular posts
+    const pinnedPosts = posts.filter(post => post.pinned);
+    const regularPosts = posts.filter(post => !post.pinned);
+    
+    // Sort regular posts by date
+    const sortedRegularPosts = regularPosts.sort((a, b) => {
+        const dateA = new Date(a.date);
+        const dateB = new Date(b.date);
+        return order === 'desc' ? dateB - dateA : dateA - dateB;
+    });
+    
+    // Sort pinned posts by date (in case there are multiple)
+    const sortedPinnedPosts = pinnedPosts.sort((a, b) => {
+        const dateA = new Date(a.date);
+        const dateB = new Date(b.date);
+        return order === 'desc' ? dateB - dateA : dateA - dateB;
+    });
+    
+    // Return pinned posts first, then regular posts
+    return [...sortedPinnedPosts, ...sortedRegularPosts];
+}
+
+function displayBlogList(posts, sortOrder = 'desc') {
     const blogSection = document.getElementById('blog');
     
-    // Clear any existing content except the title
-    const blogTitle = blogSection.querySelector('h1');
-    blogSection.innerHTML = '';
-    blogSection.appendChild(blogTitle);
+    // Remove existing blog entries but keep title and controls
+    const existingEntries = blogSection.querySelectorAll('.blog-entry');
+    existingEntries.forEach(entry => entry.remove());
     
-    // Sort posts by date (newest first)
-    posts.sort((a, b) => new Date(b.date) - new Date(a.date));
+    // Sort posts with pinned posts handling
+    const sortedPosts = sortPosts(posts, sortOrder);
     
     // Remove the loading spinner if it exists
     const spinner = document.querySelector('.loading-spinner');
@@ -61,10 +100,11 @@ function displayBlogList(posts) {
     }
     
     // Add each post to the page
-    posts.forEach(post => {
+    sortedPosts.forEach(post => {
         const entryBox = document.createElement('div');
-        entryBox.className = 'entry-box blog-entry';
+        entryBox.className = `entry-box blog-entry${post.pinned ? ' pinned-post' : ''}`;
         entryBox.innerHTML = `
+            ${post.pinned ? '<div class="pinned-badge">📌 Pinned</div>' : ''}
             <span class="entry-date">${formatDate(post.date)}</span>
             <h3><a href="?post=${post.id}" class="blog-title">${post.title}</a></h3>
             <p>${post.excerpt}</p>
