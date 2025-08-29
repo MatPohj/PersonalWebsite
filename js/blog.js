@@ -108,7 +108,10 @@ function displayBlogList(posts, sortOrder = 'desc') {
             <span class="entry-date">${formatDate(post.date)}</span>
             <h3><a href="?post=${post.id}" class="blog-title">${post.title}</a></h3>
             <p>${post.excerpt}</p>
-            <a href="?post=${post.id}" class="read-more">Read more</a>
+            <div class="blog-links">
+                <a href="?post=${post.id}" class="read-more">Read more</a>
+                ${post.githubUrl ? `<a href="${post.githubUrl}" target="_blank" rel="noopener noreferrer" class="github-link">View on GitHub</a>` : ''}
+            </div>
         `;
         blogSection.appendChild(entryBox);
     });
@@ -146,6 +149,7 @@ function loadBlogPost(post, basePath) {
             postHeader.innerHTML = `
                 <h1>${post.title}</h1>
                 <span class="entry-date">${formatDate(post.date)}</span>
+                ${post.githubUrl ? `<a href="${post.githubUrl}" target="_blank" rel="noopener noreferrer" class="github-link">View on GitHub</a>` : ''}
             `;
             
             // Add post content
@@ -173,33 +177,5 @@ function formatDate(dateString) {
 }
 
 function convertMarkdownToHtml(markdown) {
-    // For now, we'll use a basic implementation
-    // In a real project, you would use a library like marked.js
-    
-    // Convert headers
-    markdown = markdown.replace(/^# (.*$)/gm, '<h1>$1</h1>');
-    markdown = markdown.replace(/^## (.*$)/gm, '<h2>$1</h2>');
-    markdown = markdown.replace(/^### (.*$)/gm, '<h3>$1</h3>');
-    
-    // Convert paragraphs
-    markdown = markdown.replace(/^\s*(\n)?(.+)/gm, function(m) {
-        return /\<(\/)?(h|ul|ol|li|blockquote|pre|img)/.test(m) ? m : '<p>' + m + '</p>';
-    });
-    
-    // Convert bold and italic
-    markdown = markdown.replace(/\*\*(.*)\*\*/gm, '<strong>$1</strong>');
-    markdown = markdown.replace(/\*(.*)\*/gm, '<em>$1</em>');
-    
-    // Convert links
-    markdown = markdown.replace(/\[([^\[]+)\]\(([^\)]+)\)/gm, '<a href="$2">$1</a>');
-    
-    // Convert line breaks
-    markdown = markdown.replace(/^\n$/gm, '<br />');
-    
-    // Convert lists
-    markdown = markdown.replace(/^\s*[-*+]\s+(.*)/gm, '<li>$1</li>');
-    markdown = markdown.replace(/<\/li>\n<li>/g, '</li><li>');
-    markdown = markdown.replace(/(<li>.*<\/li>)/gms, '<ul>$1</ul>');
-    
-    return markdown;
+    return marked.parse(markdown);
 }

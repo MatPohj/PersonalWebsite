@@ -448,6 +448,7 @@ section {
 .social-links svg {
     display: inline-block;
     vertical-align: middle;
+    fill: currentColor; 
 }
 
 /* ==========================================================================
@@ -533,7 +534,7 @@ section {
 
 .read-more {
     display: inline-block;
-    margin-top: var(--spacing-sm);
+    margin: 0; /* CHANGED: remove top margin to align with .github-link */
     color: var(--text-primary);
     text-decoration: none;
     font-size: var(--font-size-sm);
@@ -790,4 +791,46 @@ footer {
         width: 120px;
         height: 160px; /* Maintains 3:4 aspect ratio */
     }
+}
+
+
+/* Blog links container */
+.blog-links {
+    display: flex;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-sm);
+    align-items: center; /* NEW: vertically center the links */
+}
+
+/* GitHub link styling to match read-more */
+.github-link {
+    display: inline-block;
+    color: var(--text-primary);
+    text-decoration: none;
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    transition: color var(--transition-fast);
+    text-transform: uppercase;
+}
+
+.github-link:hover {
+    color: var(--text-accent);
+    text-decoration: underline;
+}
+
+/* Read more styling: remove top margin so it aligns with github-link */
+.read-more {
+    display: inline-block;
+    margin: 0; /* CHANGED: remove top margin to align with .github-link */
+    color: var(--text-primary);
+    text-decoration: none;
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    transition: color var(--transition-fast);
+    text-transform: uppercase;
+}
+
+.read-more:hover {
+    color: var(--text-accent);
+    text-decoration: underline;
 }
