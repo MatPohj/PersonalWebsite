@@ -5,6 +5,16 @@
     "date": "2025-07-10",
     "excerpt": "This is the first post on my new blog. Here I'll share thoughts on technology, cybersecurity, and my personal projects.",
     "file": "welcome.md",
-    "pinned": true
+    "pinned": true,
+    "githubUrl": "https://github.com/MatPohj/PersonalWebsite/blob/main/blogs/welcome.md"
+  },
+  {
+    "id":"Penetration_testing",
+    "title": "Penetration testing h1",
+    "date":"2025-8-29",
+    "excerpt":"This is my first homework for Tero Karvise's Penetration testing course 2025 Autumn",
+    "file":"h1_tt.md",
+    "pinned":false,
+    "githubUrl": "https://github.com/MatPohj/PenetrationTesting25S/blob/17b0c16414e36e1b65e942d762da8889476158be/h1.md"
   }
 ]
