@@ -598,13 +598,73 @@ section {
     margin: var(--spacing-md) 0;
 }
 
+/* Enhanced link styling */
 .blog-post-content a {
-    color: var(--text-accent);
-    text-decoration: none;
+    color: #00bfff; /* Bright blue color that stands out */
+    text-decoration: underline; /* Always show underline */
+    padding: 0px 2px; /* Small padding around links */
+    border-radius: 2px;
+    font-weight: 600; /* Make links slightly bolder */
+    transition: all var(--transition-fast);
 }
 
 .blog-post-content a:hover {
-    text-decoration: underline;
+    background-color: rgba(0, 191, 255, 0.1); /* Subtle background on hover */
+    color: #1effff; /* Brighter color on hover */
+}
+
+/* Light mode link styles */
+body.light-mode .blog-post-content a {
+    color: #0066cc; /* Darker blue for light mode */
+}
+
+body.light-mode .blog-post-content a:hover {
+    background-color: rgba(0, 102, 204, 0.1);
+    color: #0055aa;
+}
+
+/* Blockquote styling */
+.blog-post-content blockquote {
+    background-color: rgba(128, 128, 128, 0.1);
+    border-left: 4px solid var(--border-primary);
+    margin: 1.5em 0;
+    padding: 0.8em 1.2em;
+    font-style: italic;
+    color: var(--text-accent);
+}
+
+/* Code block styling */
+.blog-post-content pre {
+    background-color: rgba(139, 0, 0, 0.9); /* Dark red background */
+    border: 1px solid var(--border-primary);
+    border-radius: var(--border-radius);
+    padding: 1em;
+    margin: 1.5em 0;
+    overflow: auto;
+    max-width: 100%;
+}
+
+.blog-post-content pre code {
+    display: block;
+    color: #ddd;
+    font-family: 'Courier New', monospace;
+    line-height: 1.6;
+}
+
+/* Inline code styling */
+.blog-post-content code {
+    background-color: rgba(139, 0, 0, 0.9); /* Dark red background */
+    border-radius: 3px;
+    padding: 0.2em 0.4em;
+    font-family: 'Courier New', monospace;
+    color: #fff; /* Brighter text for better contrast on red */
+}
+
+/* Light mode adjustments */
+body.light-mode .blog-post-content pre,
+body.light-mode .blog-post-content code {
+    background-color: rgba(255, 200, 200, 1); /* Light red for light mode */
+    color: #800000; /* Dark red text for light mode */
 }
 
 .loading-spinner {
