@@ -1,4 +1,4 @@
-console.log("Welcome to my website!");
+console.log("Why are you looking at my console?");
 
 // Smooth scrolling for anchor links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
