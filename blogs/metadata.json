@@ -9,21 +9,30 @@
     "githubUrl": "https://github.com/MatPohj/PersonalWebsite/blob/main/blogs/welcome.md"
   },
   {
-    "id":"Penetration_testing",
+    "id": "penetration_testing_h1",
     "title": "Penetration testing h1",
-    "date":"2025-8-29",
-    "excerpt":"This is my first homework for Tero Karvise's Penetration testing course 2025 Autumn",
-    "file":"h1_tt.md",
-    "pinned":false,
+    "date": "2025-8-29",
+    "excerpt": "This is my first homework for Tero Karvise's Penetration testing course 2025 Autumn",
+    "file": "h1_tt.md",
+    "pinned": false,
     "githubUrl": "https://github.com/MatPohj/PenetrationTesting25S/blob/17b0c16414e36e1b65e942d762da8889476158be/h1.md"
   },
   {
-    "id":"Penetration_testing",
+    "id": "penetration_testing_h2",
     "title": "Penetration testing h2",
-    "date":"2025-9-01",
-    "excerpt":"This is my second homework for Tero Karvise's Penetration testing course 2025 Autumn",
-    "file":"h2_tt.md",
-    "pinned":false,
+    "date": "2025-9-01",
+    "excerpt": "This is my second homework for Tero Karvise's Penetration testing course 2025 Autumn",
+    "file": "h2_tt.md",
+    "pinned": false,
     "githubUrl": "https://github.com/MatPohj/PenetrationTesting25S/blob/2feac5953e3bb06b9b42a9b35fc2bedcb06009c5/h2.md"
+  },
+  {
+    "id": "penetration_testing_h3",
+    "title": "Penetration testing h3",
+    "date": "2025-9-12",
+    "excerpt": "This is my third homework for Tero Karvise's Penetration testing course 2025 Autumn",
+    "file": "h3_tt.md",
+    "pinned": false,
+    "githubUrl": "https://github.com/MatPohj/PenetrationTesting25S/blob/fa13663fb24b33a35ee7da132875f308b61a62a2/h3.md"
   }
 ]
