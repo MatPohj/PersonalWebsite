@@ -177,5 +177,26 @@ function formatDate(dateString) {
 }
 
 function convertMarkdownToHtml(markdown) {
-    return marked.parse(markdown);
+    const md = window.markdownit({
+        html: true,
+        breaks: true,
+        linkify: true,
+        typographer: true
+    });
+    
+    // Custom renderer for code blocks to ensure proper overflow handling
+    md.renderer.rules.code_block = function(tokens, idx, options, env) {
+        const token = tokens[idx];
+        return `<pre style="overflow-x: auto !important; white-space: pre !important; word-wrap: normal !important; max-width: 100% !important;"><code style="white-space: pre !important; word-wrap: normal !important;">${md.utils.escapeHtml(token.content)}</code></pre>`;
+    };
+    
+    md.renderer.rules.fence = function(tokens, idx, options, env, self) {
+        const token = tokens[idx];
+        const info = token.info ? md.utils.unescapeAll(token.info).trim() : '';
+        const langName = info ? info.split(/\s+/g)[0] : '';
+        
+        return `<pre style="overflow-x: auto !important; white-space: pre !important; word-wrap: normal !important; max-width: 100% !important;"><code${langName ? ` class="${options.langPrefix}${langName}"` : ''} style="white-space: pre !important; word-wrap: normal !important;">${md.utils.escapeHtml(token.content)}</code></pre>`;
+    };
+    
+    return md.render(markdown);
 }

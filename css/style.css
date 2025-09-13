@@ -583,6 +583,101 @@ section {
     line-height: 1.8;
 }
 
+/* Code block styling - Force horizontal scrolling with stronger rules */
+.blog-post-content pre {
+    background-color: rgba(139, 0, 0, 0.9) !important;
+    border: 1px solid var(--border-primary);
+    border-radius: var(--border-radius);
+    padding: 1em;
+    margin: 1.5em 0;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    white-space: pre !important;
+    word-wrap: normal !important;
+    word-break: normal !important;
+    overflow-wrap: normal !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
+    display: block !important;
+}
+
+.blog-post-content pre code {
+    display: block !important;
+    color: #ddd;
+    font-family: 'Courier New', monospace;
+    line-height: 1.6;
+    white-space: pre !important;
+    word-wrap: normal !important;
+    word-break: normal !important;
+    overflow-wrap: normal !important;
+    max-width: none !important;
+    background: transparent !important;
+    padding: 0 !important;
+    border: none !important;
+    width: auto !important;
+}
+
+/* Force all parent containers to behave */
+.blog-post-content {
+    line-height: 1.8;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    overflow-x: hidden !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+.blog-post, .entry-box {
+    max-width: 100% !important;
+    min-width: 0 !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
+}
+
+.container {
+    max-width: var(--max-width);
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: var(--spacing-md);
+    padding-right: var(--spacing-md);
+    padding-top: 4.5em;
+    overflow-x: hidden !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
+}
+
+/* Additional safety rules for any missed elements */
+* {
+    box-sizing: border-box;
+}
+
+pre, code {
+    max-width: 100% !important;
+}
+
+/* Ensure parent containers don't overflow */
+.blog-post-content {
+    line-height: 1.8;
+    overflow-wrap: break-word; /* Only break regular text, not code */
+    word-wrap: break-word; /* Fallback for older browsers */
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: hidden; /* Hide any overflow from the content container */
+}
+
+/* Force all containers to respect width constraints */
+.blog-post, .entry-box {
+    max-width: 100%;
+    min-width: 0;
+    overflow: hidden; /* Prevent any child from breaking out */
+    box-sizing: border-box;
+}
+
 .blog-post-content h2 {
     color: var(--text-accent);
     margin-top: var(--spacing-lg);
@@ -633,27 +728,9 @@ body.light-mode .blog-post-content a:hover {
     color: var(--text-accent);
 }
 
-/* Code block styling */
-.blog-post-content pre {
-    background-color: rgba(139, 0, 0, 0.9); /* Dark red background */
-    border: 1px solid var(--border-primary);
-    border-radius: var(--border-radius);
-    padding: 1em;
-    margin: 1.5em 0;
-    overflow: auto;
-    max-width: 100%;
-}
-
-.blog-post-content pre code {
-    display: block;
-    color: #ddd;
-    font-family: 'Courier New', monospace;
-    line-height: 1.6;
-}
-
 /* Inline code styling */
 .blog-post-content code {
-    background-color: rgba(139, 0, 0, 0.9); /* Dark red background */
+    background-color: rgba(139, 0, 0, 0.432); /* Dark red background */
     border-radius: 3px;
     padding: 0.2em 0.4em;
     font-family: 'Courier New', monospace;
@@ -664,7 +741,7 @@ body.light-mode .blog-post-content a:hover {
 body.light-mode .blog-post-content pre,
 body.light-mode .blog-post-content code {
     background-color: rgba(255, 200, 200, 1); /* Light red for light mode */
-    color: #800000; /* Dark red text for light mode */
+    color: #ffffff; /* Dark red text for light mode */
 }
 
 .loading-spinner {
