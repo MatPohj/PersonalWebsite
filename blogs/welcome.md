@@ -9,4 +9,4 @@ I'll be posting about:
 - Raspberry Pi projects
 - Some programming projects I might work on
 - Stuff about cybersecurity
-- My homework raport's for couple of courses
+- My homework report's for couple of courses
