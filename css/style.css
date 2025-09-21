@@ -30,7 +30,7 @@
     --font-size-hero: 2em;
     
     /* Layout */
-    --max-width: 1140px;
+    --max-width: 1200px;
     --border-radius: 0px;
     --transition-fast: 0.2s;
     --transition-normal: 0.3s;
@@ -783,7 +783,7 @@ footer {
    ========================================================================== */
 
 /* Medium screens (tablets and small desktops) */
-@media (max-width: 1255px) {
+@media (max-width: 1200px) {
     .container {
         padding-left: var(--spacing-md);
         padding-right: var(--spacing-md);

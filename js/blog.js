@@ -152,10 +152,13 @@ function loadBlogPost(post, basePath) {
                 ${post.githubUrl ? `<a href="${post.githubUrl}" target="_blank" rel="noopener noreferrer" class="github-link">View on GitHub</a>` : ''}
             `;
             
-            // Add post content
+            // Add post content with file path and basePath for correct image handling
             const postContent = document.createElement('div');
             postContent.className = 'blog-post-content';
-            postContent.innerHTML = convertMarkdownToHtml(markdown);
+            
+            // Pass basePath to the convertMarkdownToHtml function
+            const htmlContent = convertMarkdownToHtml(markdown, post.file, basePath);
+            postContent.innerHTML = htmlContent;
             
             // Append everything to the container
             postContainer.appendChild(postHeader);
@@ -176,13 +179,34 @@ function formatDate(dateString) {
     return new Date(dateString).toLocaleDateString('en-US', options);
 }
 
-function convertMarkdownToHtml(markdown) {
+function convertMarkdownToHtml(markdown, filePath = '', basePath = '') {
     const md = window.markdownit({
         html: true,
         breaks: true,
         linkify: true,
         typographer: true
     });
+    
+    // Get the directory path from the filePath
+    const dirPath = filePath.includes('/') 
+        ? filePath.substring(0, filePath.lastIndexOf('/')) + '/' 
+        : '';
+    
+    // Override image renderer to handle paths correctly
+    const defaultImageRenderer = md.renderer.rules.image;
+    md.renderer.rules.image = function(tokens, idx, options, env, self) {
+        const token = tokens[idx];
+        const srcIndex = token.attrIndex('src');
+        if (srcIndex >= 0) {
+            const src = token.attrs[srcIndex][1];
+            // Only prepend path if it's a relative path without / at the beginning
+            if (!src.startsWith('/') && !src.startsWith('http')) {
+                // For images in subfolders, ensure correct path with basePath
+                token.attrs[srcIndex][1] = `${basePath}blogs/${dirPath}${src}`;
+            }
+        }
+        return defaultImageRenderer(tokens, idx, options, env, self);
+    };
     
     // Custom renderer for code blocks to ensure proper overflow handling
     md.renderer.rules.code_block = function(tokens, idx, options, env) {
