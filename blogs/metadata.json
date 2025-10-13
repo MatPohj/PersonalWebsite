@@ -52,5 +52,23 @@
     "file": "h5/h5.md",
     "pinned": false,
     "githubUrl": "https://github.com/MatPohj/PenetrationTesting25S/blob/f8962074e400369f8ff7e0196f60da93c32adf92/h5/h5.md"
+  },
+  {
+    "id": "penetration_testing_h6",
+    "title": "Penetration testing h6, Simpukoita, Sliver",
+    "date": "2025-09-29",
+    "excerpt": "This is my sixth homework for Tero Karvise's Penetration testing course 2025 Autumn",
+    "file": "h6/h6.md",
+    "pinned": false,
+    "githubUrl": "https://github.com/MatPohj/PenetrationTesting25S/blob/8bfba1cbb326c553bfd927c7882f166e2aa30201/h6/h6.md"
+  },
+  {
+    "id": "penetration_testing_h7",
+    "title": "Penetration testing h7, Maalisuoralla, Couple HTB-Boxes",
+    "date": "2025-10-06",
+    "excerpt": "This is my seventh homework for Tero Karvise's Penetration testing course 2025 Autumn",
+    "file": "h7/h7.md",
+    "pinned": false,
+    "githubUrl": "https://github.com/MatPohj/PenetrationTesting25S/blob/8bfba1cbb326c553bfd927c7882f166e2aa30201/h7/h7.md"
   }
 ]
