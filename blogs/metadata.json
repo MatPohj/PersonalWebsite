@@ -13,7 +13,7 @@
     "title": "Penetration testing h1, setting up Kali and using nmap",
     "date": "2025-08-29",
     "excerpt": "This is my first homework for Tero Karvise's Penetration testing course 2025 Autumn",
-    "file": "h1_tt.md",
+    "file": "penetration_testing/h1_tt.md",
     "pinned": false,
     "githubUrl": "https://github.com/MatPohj/PenetrationTesting25S/blob/17b0c16414e36e1b65e942d762da8889476158be/h1.md"
   },
@@ -22,7 +22,7 @@
     "title": "Penetration testing h2, Metasploit and Metasploitable 2",
     "date": "2025-09-01",
     "excerpt": "This is my second homework for Tero Karvise's Penetration testing course 2025 Autumn",
-    "file": "h2_tt.md",
+    "file": "penetration_testing/h2_tt.md",
     "pinned": false,
     "githubUrl": "https://github.com/MatPohj/PenetrationTesting25S/blob/2feac5953e3bb06b9b42a9b35fc2bedcb06009c5/h2.md"
   },
@@ -31,7 +31,7 @@
     "title": "Penetration testing h3, ZAP/idor/xss",
     "date": "2025-09-12",
     "excerpt": "This is my third homework for Tero Karvise's Penetration testing course 2025 Autumn",
-    "file": "h3_tt.md",
+    "file": "penetration_testing/h3_tt.md",
     "pinned": false,
     "githubUrl": "https://github.com/MatPohj/PenetrationTesting25S/blob/fa13663fb24b33a35ee7da132875f308b61a62a2/h3.md"
   },
@@ -40,7 +40,7 @@
     "title": "Penetration testing h4, Fuzzy/ffuf",
     "date": "2025-09-19",
     "excerpt": "This is my fourth homework for Tero Karvise's Penetration testing course 2025 Autumn",
-    "file": "h4/h4.md",
+    "file": "penetration_testing/h4/h4.md",
     "pinned": false,
     "githubUrl": "https://github.com/MatPohj/PenetrationTesting25S/blob/f8962074e400369f8ff7e0196f60da93c32adf92/h4/h4.md"
   },
@@ -49,7 +49,7 @@
     "title": "Penetration testing h5, hashcat/john",
     "date": "2025-09-24",
     "excerpt": "This is my fifth homework for Tero Karvise's Penetration testing course 2025 Autumn",
-    "file": "h5/h5.md",
+    "file": "penetration_testing/h5/h5.md",
     "pinned": false,
     "githubUrl": "https://github.com/MatPohj/PenetrationTesting25S/blob/f8962074e400369f8ff7e0196f60da93c32adf92/h5/h5.md"
   },
@@ -58,7 +58,7 @@
     "title": "Penetration testing h6, Simpukoita, Sliver",
     "date": "2025-09-29",
     "excerpt": "This is my sixth homework for Tero Karvise's Penetration testing course 2025 Autumn",
-    "file": "h6/h6.md",
+    "file": "penetration_testing/h6/h6.md",
     "pinned": false,
     "githubUrl": "https://github.com/MatPohj/PenetrationTesting25S/blob/8bfba1cbb326c553bfd927c7882f166e2aa30201/h6/h6.md"
   },
@@ -67,8 +67,71 @@
     "title": "Penetration testing h7, Maalisuoralla, Couple HTB-Boxes",
     "date": "2025-10-06",
     "excerpt": "This is my seventh homework for Tero Karvise's Penetration testing course 2025 Autumn",
-    "file": "h7/h7.md",
+    "file": "penetration_testing/h7/h7.md",
     "pinned": false,
     "githubUrl": "https://github.com/MatPohj/PenetrationTesting25S/blob/8bfba1cbb326c553bfd927c7882f166e2aa30201/h7/h7.md"
+  },
+  {
+    "id": "network_attacks_h1",
+    "title": "h1 Sniff",
+    "date": "2025-10-27",
+    "excerpt": ".",
+    "file": "network_attacks_and_reconnaissance/h1/h1.md",
+    "pinned": false,
+    "githubUrl": "https://github.com/MatPohj/Network-Attacks-and-Reconnaissance-Autumn-25/blob/main/h1/h1.md"
+  },
+  {
+    "id": "network_attacks_h2",
+    "title": "h2: Lempiväri: violetti",
+    "date": "2025-11-03",
+    "excerpt": ".",
+    "file": "network_attacks_and_reconnaissance/h2/h2.md",
+    "pinned": false,
+    "githubUrl": "https://github.com/MatPohj/Network-Attacks-and-Reconnaissance-Autumn-25/blob/main/h2/h2.md"
+  },
+  {
+    "id": "network_attacks_h3",
+    "title": "h3 Messuilla",
+    "date": "2025-11-10",
+    "excerpt": ".",
+    "file": "network_attacks_and_reconnaissance/h3/h3.md",
+    "pinned": false,
+    "githubUrl": "https://github.com/MatPohj/Network-Attacks-and-Reconnaissance-Autumn-25/blob/main/h3/h3.md"
+  },
+  {
+    "id": "network_attacks_h4",
+    "title": "h4 NFC ja RFID",
+    "date": "2025-11-17",
+    "excerpt": ".",
+    "file": "network_attacks_and_reconnaissance/h4/h4.md",
+    "pinned": false,
+    "githubUrl": "https://github.com/MatPohj/Network-Attacks-and-Reconnaissance-Autumn-25/blob/main/h4/h4.md"
+  },
+  {
+    "id": "network_attacks_h5",
+    "title": "h5 Laboratorio- ja simulaatioympäristöt hyökkäyksissä",
+    "date": "2025-11-24",
+    "excerpt": ".",
+    "file": "network_attacks_and_reconnaissance/h5/h5.md",
+    "pinned": false,
+    "githubUrl": "https://github.com/MatPohj/Network-Attacks-and-Reconnaissance-Autumn-25/blob/main/h5/h5.md"
+  },
+  {
+    "id": "network_attacks_h6",
+    "title": "h6 WiFi",
+    "date": "2025-12-01",
+    "excerpt": ".",
+    "file": "network_attacks_and_reconnaissance/h6/h6.md",
+    "pinned": false,
+    "githubUrl": "https://github.com/MatPohj/Network-Attacks-and-Reconnaissance-Autumn-25/blob/main/h6/h6.md"
+  },
+  {
+    "id": "network_attacks_h7",
+    "title": "h7 Aaltoja harjaamassa",
+    "date": "2025-12-08",
+    "excerpt": ".",
+    "file": "network_attacks_and_reconnaissance/h7/h7.md",
+    "pinned": false,
+    "githubUrl": "https://github.com/MatPohj/Network-Attacks-and-Reconnaissance-Autumn-25/blob/main/h7/h7.md"
   }
 ]
