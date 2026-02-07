@@ -34,6 +34,12 @@
     <main class="container">
         <section id="blog">
             <h1>Blog</h1>
+            <div class="filter-controls" id="filter-controls" aria-label="Filter blog posts by group">
+                <button class="filter-button active" data-filter="all">All</button>
+                <button class="filter-button" data-filter="random">Random</button>
+                <button class="filter-button" data-filter="pentesting">Pentesting course</button>
+                <button class="filter-button" data-filter="network">Network attacks and reconnaissance</button>
+            </div>
             <div class="sort-controls">
                 <label for="sort-select">Sort by date:</label>
                 <select id="sort-select">
