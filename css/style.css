@@ -482,6 +482,39 @@ section {
     text-decoration: underline;
 }
 
+/* Filter controls */
+.filter-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+    margin: 0 0 var(--spacing-md);
+}
+
+.filter-button {
+    background: transparent;
+    color: var(--text-primary);
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-xs) var(--spacing-md);
+    font-family: var(--font-family);
+    font-size: var(--font-size-sm);
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.filter-button:hover,
+.filter-button.active {
+    background: var(--text-primary);
+    color: var(--bg-primary);
+    border-color: var(--text-primary);
+}
+
+.filter-button:focus-visible {
+    outline: 2px solid var(--text-accent);
+    outline-offset: 2px;
+}
+
 /* Sort controls */
 .sort-controls {
     margin-bottom: var(--spacing-lg);

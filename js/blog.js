@@ -1,5 +1,7 @@
 // Global variable to store all posts
 let allPosts = [];
+let currentFilter = 'all';
+let currentSortOrder = 'desc';
 
 document.addEventListener('DOMContentLoaded', function() {
     // Get base path for GitHub Pages compatibility
@@ -14,11 +16,14 @@ document.addEventListener('DOMContentLoaded', function() {
             return response.json();
         })
         .then(posts => {
-            allPosts = posts; // Store posts globally
-            displayBlogList(posts);
+            // Enrich posts with category information for filtering
+            const categorizedPosts = posts.map(addCategoryToPost);
+            allPosts = categorizedPosts; // Store posts globally
+            displayBlogList(allPosts, currentSortOrder, currentFilter);
             
             // Set up sort functionality
             setupSortControls();
+            setupFilterControls();
             
             // Check if a specific blog post is requested via URL parameter
             const urlParams = new URLSearchParams(window.location.search);
@@ -54,10 +59,33 @@ function setupSortControls() {
     const sortSelect = document.getElementById('sort-select');
     if (sortSelect) {
         sortSelect.addEventListener('change', function() {
-            const sortOrder = this.value;
-            displayBlogList(allPosts, sortOrder);
+            currentSortOrder = this.value;
+            displayBlogList(allPosts, currentSortOrder, currentFilter);
         });
     }
+}
+
+function setupFilterControls() {
+    const filterContainer = document.getElementById('filter-controls');
+    if (!filterContainer) {
+        return;
+    }
+
+    filterContainer.addEventListener('click', event => {
+        const button = event.target.closest('button[data-filter]');
+        if (!button) {
+            return;
+        }
+
+        currentFilter = button.getAttribute('data-filter');
+
+        // Toggle active state on buttons
+        filterContainer.querySelectorAll('.filter-button').forEach(btn => {
+            btn.classList.toggle('active', btn === button);
+        });
+
+        displayBlogList(allPosts, currentSortOrder, currentFilter);
+    });
 }
 
 function sortPosts(posts, order = 'desc') {
@@ -83,15 +111,16 @@ function sortPosts(posts, order = 'desc') {
     return [...sortedPinnedPosts, ...sortedRegularPosts];
 }
 
-function displayBlogList(posts, sortOrder = 'desc') {
+function displayBlogList(posts, sortOrder = 'desc', filter = currentFilter) {
     const blogSection = document.getElementById('blog');
     
     // Remove existing blog entries but keep title and controls
     const existingEntries = blogSection.querySelectorAll('.blog-entry');
     existingEntries.forEach(entry => entry.remove());
     
-    // Sort posts with pinned posts handling
-    const sortedPosts = sortPosts(posts, sortOrder);
+    // Filter and sort posts with pinned posts handling
+    const filteredPosts = filterPosts(posts, filter);
+    const sortedPosts = sortPosts(filteredPosts, sortOrder);
     
     // Remove the loading spinner if it exists
     const spinner = document.querySelector('.loading-spinner');
@@ -115,6 +144,13 @@ function displayBlogList(posts, sortOrder = 'desc') {
         `;
         blogSection.appendChild(entryBox);
     });
+}
+
+function filterPosts(posts, filter = 'all') {
+    if (filter === 'all') {
+        return posts;
+    }
+    return posts.filter(post => post.category === filter);
 }
 
 function loadBlogPost(post, basePath) {
@@ -179,6 +215,38 @@ function formatDate(dateString) {
     return new Date(dateString).toLocaleDateString('en-US', options);
 }
 
+function addCategoryToPost(post) {
+    const normalized = normalizeCategory(post.category);
+    if (normalized) {
+        return { ...post, category: normalized };
+    }
+
+    const filePath = post.file || '';
+    if (filePath.startsWith('penetration_testing')) {
+        return { ...post, category: 'pentesting' };
+    }
+    if (filePath.startsWith('network_attacks_and_reconnaissance')) {
+        return { ...post, category: 'network' };
+    }
+    return { ...post, category: 'random' };
+}
+
+function normalizeCategory(category) {
+    if (!category) {
+        return '';
+    }
+    const lower = category.toLowerCase();
+    if (lower.includes('pentest')) {
+        return 'pentesting';
+    }
+    if (lower.includes('network')) {
+        return 'network';
+    }
+    if (lower === 'random') {
+        return 'random';
+    }
+    return lower;
+}
 function convertMarkdownToHtml(markdown, filePath = '', basePath = '') {
     const md = window.markdownit({
         html: true,
