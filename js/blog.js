@@ -228,6 +228,12 @@ function addCategoryToPost(post) {
     if (filePath.startsWith('network_attacks_and_reconnaissance')) {
         return { ...post, category: 'network' };
     }
+    if (filePath.startsWith('Application-Hacking')) {
+        return { ...post, category: 'application-hacking' };
+    }
+    if (filePath.startsWith('Server management')) {
+        return { ...post, category: 'server-management' };
+    }
     return { ...post, category: 'random' };
 }
 
@@ -241,6 +247,12 @@ function normalizeCategory(category) {
     }
     if (lower.includes('network')) {
         return 'network';
+    }
+    if (lower.includes('application')) {
+        return 'application-hacking';
+    }
+    if (lower.includes('server')) {
+        return 'server-management';
     }
     if (lower === 'random') {
         return 'random';

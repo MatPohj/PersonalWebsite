@@ -133,5 +133,105 @@
     "file": "network_attacks_and_reconnaissance/h7/h7.md",
     "pinned": false,
     "githubUrl": "https://github.com/MatPohj/Network-Attacks-and-Reconnaissance-Autumn-25/blob/main/h7/h7.md"
+  },
+  {
+    "id": "application_hacking_h2",
+    "title": "h2 Break & Unbreak",
+    "date": "2026-01-19",
+    "excerpt": ".",
+    "file": "Application-Hacking/h2/h2.md",
+    "category": "application-hacking",
+    "pinned": false,
+    "githubUrl": "https://github.com/MatPohj/PersonalWebsite/blob/main/blogs/Application-Hacking/h2/h2.md"
+  },
+  {
+    "id": "application_hacking_h3",
+    "title": "h3 No Strings Attached",
+    "date": "2026-01-26",
+    "excerpt": ".",
+    "file": "Application-Hacking/h3/h3.md",
+    "category": "application-hacking",
+    "pinned": false,
+    "githubUrl": "https://github.com/MatPohj/PersonalWebsite/blob/main/blogs/Application-Hacking/h3/h3.md"
+  },
+  {
+    "id": "application_hacking_h4",
+    "title": "h4 Some Disassembly Required",
+    "date": "2026-02-02",
+    "excerpt": ".",
+    "file": "Application-Hacking/h4/h4.md",
+    "category": "application-hacking",
+    "pinned": false,
+    "githubUrl": "https://github.com/MatPohj/PersonalWebsite/blob/main/blogs/Application-Hacking/h4/h4.md"
+  },
+  {
+    "id": "application_hacking_h5",
+    "title": "h5 It's Alive!",
+    "date": "2026-02-09",
+    "excerpt": ".",
+    "file": "Application-Hacking/h5/h5.md",
+    "category": "application-hacking",
+    "pinned": false,
+    "githubUrl": "https://github.com/MatPohj/PersonalWebsite/blob/main/blogs/Application-Hacking/h5/h5.md"
+  },
+  {
+    "id": "application_hacking_h6",
+    "title": "h6 Hardware Hacking",
+    "date": "2026-02-16",
+    "excerpt": ".",
+    "file": "Application-Hacking/h6/h6.md",
+    "category": "application-hacking",
+    "pinned": false,
+    "githubUrl": "https://github.com/MatPohj/PersonalWebsite/blob/main/blogs/Application-Hacking/h6/h6.md"
+  },
+  {
+    "id": "application_hacking_h7",
+    "title": "h7 Uhagre2",
+    "date": "2026-02-23",
+    "excerpt": ".",
+    "file": "Application-Hacking/h7/h7.md",
+    "category": "application-hacking",
+    "pinned": false,
+    "githubUrl": "https://github.com/MatPohj/PersonalWebsite/blob/main/blogs/Application-Hacking/h7/h7.md"
+  },
+  {
+    "id": "server_management_h1",
+    "title": "h1 Hei Ansiblen maailma",
+    "date": "2026-03-02",
+    "excerpt": ".",
+    "file": "Server management/h1/h1.md",
+    "category": "server-management",
+    "pinned": false,
+    "githubUrl": "https://github.com/MatPohj/PersonalWebsite/blob/main/blogs/Server%20management/h1/h1.md"
+  },
+  {
+    "id": "server_management_h2",
+    "title": "h2 Voileipa",
+    "date": "2026-03-09",
+    "excerpt": ".",
+    "file": "Server management/h2/h2.md",
+    "category": "server-management",
+    "pinned": false,
+    "githubUrl": "https://github.com/MatPohj/PersonalWebsite/blob/main/blogs/Server%20management/h2/h2.md"
+  },
+  {
+    "id": "server_management_h3",
+    "title": "h3 Demoni",
+    "date": "2026-03-16",
+    "excerpt": ".",
+    "file": "Server management/h3/h3.md",
+    "category": "server-management",
+    "pinned": false,
+    "githubUrl": "https://github.com/MatPohj/PersonalWebsite/blob/main/blogs/Server%20management/h3/h3.md"
+  },
+  {
+    "id": "server_management_h4",
+    "title": "h4 Pizza Fantasia",
+    "date": "2026-03-23",
+    "excerpt": ".",
+    "file": "Server management/h4/h4.md",
+    "category": "server-management",
+    "pinned": false,
+    "githubUrl": "https://github.com/MatPohj/PersonalWebsite/blob/main/blogs/Server%20management/h4/h4.md"
   }
 ]
