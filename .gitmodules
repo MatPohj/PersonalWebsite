@@ -1,0 +1,6 @@
+[submodule "blogs/Application-Hacking"]
+	path = blogs/Application-Hacking
+	url = https://github.com/MatPohj/Application-Hacking
+[submodule "blogs/Server management"]
+	path = blogs/Server management
+	url = https://github.com/MatPohj/Palvelinten-hallinta-25-kevat
