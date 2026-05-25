@@ -3,14 +3,14 @@
    ========================================================================== */
 
 :root {
-    /* Colors - Dark Theme */
-    --bg-primary: #000000;
-    --bg-secondary: #000000;
-    --text-primary: #c0c0c0;
-    --text-secondary: #808080;
-    --text-accent: #ffffff;
-    --border-primary: #808080;
-    --border-secondary: rgba(255, 255, 255, 0.2);
+    /* Colors - Graphite Theme */
+    --bg-primary: #111111;
+    --bg-secondary: #1b1b1b;
+    --text-primary: #d1d1d1;
+    --text-secondary: #8c8c8c;
+    --text-accent: #9ad200;
+    --border-primary: #3a3a3a;
+    --border-secondary: rgba(154, 210, 0, 0.2);
     
     /* Spacing */
     --spacing-xs: 0.4em;
@@ -38,26 +38,9 @@
     
     /* Z-index */
     --z-nav: 999;
-    --z-theme-toggle: 1000;
     --z-header: 100;
     --z-entry: 2;
     --z-timeline: 1;
-}
-
-/* Light Theme Variables */
-body.light-mode {
-    --bg-primary: #ffffff;
-    --bg-secondary: #ffffff;
-    --text-primary: #404040;
-    --text-secondary: #808080;
-    --text-accent: #000000;
-    --border-primary: #808080;
-    --border-secondary: #808080;
-}
-
-/* Light mode navigation background */
-body.light-mode nav {
-    background: rgba(255, 255, 255, 0.9);
 }
 
 /* ==========================================================================
@@ -102,7 +85,7 @@ nav {
     top: 0;
     left: 0;
     width: 100vw;
-    background: rgba(0, 0, 0, 0.8);
+    background: var(--bg-secondary);
     padding: 0.8em 0;
     z-index: var(--z-nav);
     text-align: center;
@@ -138,34 +121,6 @@ nav a.active {
     background: var(--text-primary);
 }
 
-/* Theme Toggle Button */
-.theme-toggle {
-    position: fixed;
-    top: 0.8em;
-    right: 1em;
-    background: transparent;
-    border: none;
-    color: var(--text-primary);
-    padding: 0.8em var(--spacing-md);
-    cursor: pointer;
-    font-size: var(--font-size-base);
-    font-family: var(--font-family);
-    text-transform: uppercase;
-    transition: all var(--transition-fast);
-    z-index: var(--z-theme-toggle);
-    border-radius: var(--border-radius);
-    text-decoration: none;
-    font-weight: normal;
-    display: inline-block;
-    min-width: 4em;
-    text-align: center;
-    margin: 0 15px;
-}
-
-.theme-toggle:hover {
-    background: var(--text-primary);
-    color: var(--bg-primary);
-}
 
 /* ==========================================================================
    LAYOUT CONTAINERS
@@ -455,6 +410,86 @@ section {
    BLOG STYLES
    ========================================================================== */
 
+.blog-group {
+    border: 1px solid var(--border-primary);
+    border-radius: var(--border-radius);
+    background: var(--bg-secondary);
+    margin-bottom: var(--spacing-lg);
+    overflow: hidden;
+}
+
+.blog-group-summary {
+    cursor: pointer;
+    list-style: none;
+    padding: var(--spacing-sm) var(--spacing-md);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--text-primary);
+    background: var(--bg-secondary);
+    position: relative;
+    padding-right: calc(var(--spacing-md) + 1.4em);
+}
+
+.blog-group-summary::-webkit-details-marker {
+    display: none;
+}
+
+.blog-group-summary::marker {
+    content: '';
+}
+
+.blog-group-summary::after {
+    content: '▾';
+    color: var(--text-secondary);
+    font-size: var(--font-size-sm);
+    transition: transform var(--transition-fast);
+    position: absolute;
+    right: var(--spacing-md);
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.blog-group[open] .blog-group-summary::after {
+    transform: translateY(-50%) rotate(180deg);
+}
+
+.blog-group-title {
+    letter-spacing: 0.04em;
+}
+
+.blog-group-count {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
+    text-transform: none;
+    white-space: nowrap;
+}
+
+.blog-group-count-label {
+    color: var(--text-secondary);
+    font-size: var(--font-size-sm);
+}
+
+.blog-group-count-value {
+    color: var(--text-secondary);
+    font-size: var(--font-size-sm);
+    min-width: 2ch;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+.blog-group-list {
+    padding: var(--spacing-sm) var(--spacing-md) var(--spacing-md);
+}
+
+.blog-group-list .blog-entry:last-child {
+    margin-bottom: 0;
+}
+
 .blog-entry {
     cursor: pointer;
     transition: transform var(--transition-fast) ease-in-out;
@@ -728,7 +763,7 @@ pre, code {
 
 /* Enhanced link styling */
 .blog-post-content a {
-    color: #00bfff; /* Bright blue color that stands out */
+    color: #4aa8d8; /* Softer blue for graphite theme */
     text-decoration: underline; /* Always show underline */
     padding: 0px 2px; /* Small padding around links */
     border-radius: 2px;
@@ -737,19 +772,10 @@ pre, code {
 }
 
 .blog-post-content a:hover {
-    background-color: rgba(0, 191, 255, 0.1); /* Subtle background on hover */
-    color: #1effff; /* Brighter color on hover */
+    background-color: rgba(74, 168, 216, 0.12); /* Subtle background on hover */
+    color: #7ac5f0; /* Softer hover color */
 }
 
-/* Light mode link styles */
-body.light-mode .blog-post-content a {
-    color: #0066cc; /* Darker blue for light mode */
-}
-
-body.light-mode .blog-post-content a:hover {
-    background-color: rgba(0, 102, 204, 0.1);
-    color: #0055aa;
-}
 
 /* Blockquote styling */
 .blog-post-content blockquote {
@@ -767,15 +793,9 @@ body.light-mode .blog-post-content a:hover {
     border-radius: 3px;
     padding: 0.2em 0.4em;
     font-family: 'Courier New', monospace;
-    color: #fff; /* Brighter text for better contrast on red */
+    color: #ffffff; /* White text for better contrast on red */
 }
 
-/* Light mode adjustments */
-body.light-mode .blog-post-content pre,
-body.light-mode .blog-post-content code {
-    background-color: rgba(255, 200, 200, 1); /* Light red for light mode */
-    color: #ffffff; /* Dark red text for light mode */
-}
 
 .loading-spinner {
     text-align: center;
