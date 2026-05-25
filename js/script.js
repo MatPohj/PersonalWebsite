@@ -11,40 +11,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// Theme toggle functionality
-function initThemeToggle() {
-    // Check for saved theme preference or default to dark mode
-    const savedTheme = localStorage.getItem('theme') || 'dark';
-    
-    // Apply the saved theme
-    if (savedTheme === 'light') {
-        document.body.classList.add('light-mode');
-    }
-    
-    // Create theme toggle button
-    const themeToggle = document.createElement('button');
-    themeToggle.className = 'theme-toggle';
-    themeToggle.textContent = document.body.classList.contains('light-mode') ? 'DARK' : 'LIGHT';
-    themeToggle.setAttribute('aria-label', 'Toggle theme');
-    document.body.appendChild(themeToggle);
-    
-    // Add click event listener
-    themeToggle.addEventListener('click', function() {
-        document.body.classList.toggle('light-mode');
-        const isLight = document.body.classList.contains('light-mode');
-        
-        // Update button text
-        this.textContent = isLight ? 'DARK' : 'LIGHT';
-        
-        // Save preference
-        localStorage.setItem('theme', isLight ? 'light' : 'dark');
-    });
-}
-
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize theme toggle
-    initThemeToggle();
-    
     // Tab switching logic
     function initTabs() {
         const tabButtons = document.querySelectorAll('.tab-button');

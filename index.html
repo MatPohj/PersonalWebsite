@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' https: data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests">
     <title>Matti Pohjanoksa - IT Student & Cybersecurity Enthusiast</title>
 
 
@@ -32,13 +33,7 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="icon" href="/pictures/mplogo.png" type="image/png">
 
-    <script type="application/ld+json">
-    {
-      "name": "Matti Pohjanoksa",
-      "url": "https://matpohj.fi",
-      "logo": "https://matpohj.fi/pictures/mplogo.png"
-    }
-    </script>
+        <script type="application/ld+json" src="js/site-schema.json"></script>
 </head>
 
 <body>
@@ -60,8 +55,7 @@
             <h1>Matti Pohjanoksa - IT Student & Cybersecurity Enthusiast</h1>
             <p>I'm a 22-year-old IT BBA student from Vantaa, Finland, studying at Haaga-Helia University of Applied
                 Sciences. I am passionate about cybersecurity and enjoy tinkering with technology, especially Raspberry
-                Pi projects.
-                Feel free to switch the page's theme between dark and light mode. You can contact me trough LinkedIn</p>
+                Pi projects. You can contact me through LinkedIn</p>
             <ul class="social-links">
                 <li>
                     <a href="https://www.linkedin.com/in/matti-pohjanoksa-01286222b/" target="Link to my LinkedIn"
@@ -76,7 +70,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="https://github.com/MatPohj" target="_blank" rel="Link to my Github" aria-label="GitHub">
+                    <a href="https://github.com/MatPohj" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
                         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
                             style="vertical-align:middle;">
                             <path
@@ -225,7 +219,7 @@
     </main>
     <footer>
         <div class="container">
-            <p>&copy; 2025 Matti Pohjanoksa</p>
+            <p>&copy; 2026 Matti Pohjanoksa</p>
         </div>
     </footer>
     <script src="js/script.js"></script>

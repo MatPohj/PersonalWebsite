@@ -1,6 +1,5 @@
 // Global variable to store all posts
 let allPosts = [];
-let currentFilter = 'all';
 let currentSortOrder = 'desc';
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -19,11 +18,10 @@ document.addEventListener('DOMContentLoaded', function() {
             // Enrich posts with category information for filtering
             const categorizedPosts = posts.map(addCategoryToPost);
             allPosts = categorizedPosts; // Store posts globally
-            displayBlogList(allPosts, currentSortOrder, currentFilter);
+            displayBlogList(allPosts, currentSortOrder);
             
             // Set up sort functionality
             setupSortControls();
-            setupFilterControls();
             
             // Check if a specific blog post is requested via URL parameter
             const urlParams = new URLSearchParams(window.location.search);
@@ -38,7 +36,8 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .catch(error => {
             console.error('Error loading blog posts:', error);
-            document.getElementById('blog').innerHTML += `<p>Error loading blog posts: ${error.message}</p>`;
+            const blogSection = document.getElementById('blog');
+            appendErrorNotice(blogSection, `Error loading blog posts: ${error.message}`);
         });
 });
 
@@ -60,32 +59,9 @@ function setupSortControls() {
     if (sortSelect) {
         sortSelect.addEventListener('change', function() {
             currentSortOrder = this.value;
-            displayBlogList(allPosts, currentSortOrder, currentFilter);
+            displayBlogList(allPosts, currentSortOrder);
         });
     }
-}
-
-function setupFilterControls() {
-    const filterContainer = document.getElementById('filter-controls');
-    if (!filterContainer) {
-        return;
-    }
-
-    filterContainer.addEventListener('click', event => {
-        const button = event.target.closest('button[data-filter]');
-        if (!button) {
-            return;
-        }
-
-        currentFilter = button.getAttribute('data-filter');
-
-        // Toggle active state on buttons
-        filterContainer.querySelectorAll('.filter-button').forEach(btn => {
-            btn.classList.toggle('active', btn === button);
-        });
-
-        displayBlogList(allPosts, currentSortOrder, currentFilter);
-    });
 }
 
 function sortPosts(posts, order = 'desc') {
@@ -111,46 +87,166 @@ function sortPosts(posts, order = 'desc') {
     return [...sortedPinnedPosts, ...sortedRegularPosts];
 }
 
-function displayBlogList(posts, sortOrder = 'desc', filter = currentFilter) {
+function displayBlogList(posts, sortOrder = 'desc') {
     const blogSection = document.getElementById('blog');
-    
-    // Remove existing blog entries but keep title and controls
+    if (!blogSection) {
+        return;
+    }
+
+    // Remove existing blog groups and entries but keep title and controls
+    const existingGroups = blogSection.querySelectorAll('.blog-group');
+    existingGroups.forEach(group => group.remove());
     const existingEntries = blogSection.querySelectorAll('.blog-entry');
     existingEntries.forEach(entry => entry.remove());
-    
-    // Filter and sort posts with pinned posts handling
-    const filteredPosts = filterPosts(posts, filter);
-    const sortedPosts = sortPosts(filteredPosts, sortOrder);
-    
+
     // Remove the loading spinner if it exists
     const spinner = document.querySelector('.loading-spinner');
     if (spinner) {
         spinner.remove();
     }
-    
-    // Add each post to the page
-    sortedPosts.forEach(post => {
-        const entryBox = document.createElement('div');
-        entryBox.className = `entry-box blog-entry${post.pinned ? ' pinned-post' : ''}`;
-        entryBox.innerHTML = `
-            ${post.pinned ? '<div class="pinned-badge">📌 Pinned</div>' : ''}
-            <span class="entry-date">${formatDate(post.date)}</span>
-            <h3><a href="?post=${post.id}" class="blog-title">${post.title}</a></h3>
-            <p>${post.excerpt}</p>
-            <div class="blog-links">
-                <a href="?post=${post.id}" class="read-more">Read more</a>
-                ${post.githubUrl ? `<a href="${post.githubUrl}" target="_blank" rel="noopener noreferrer" class="github-link">View on GitHub</a>` : ''}
-            </div>
-        `;
-        blogSection.appendChild(entryBox);
+
+    const groupedPosts = groupPostsByCategory(posts);
+    const orderedCategories = getOrderedCategories(Object.keys(groupedPosts));
+
+    orderedCategories.forEach(category => {
+        const postsInCategory = groupedPosts[category] || [];
+        if (!postsInCategory.length) {
+            return;
+        }
+
+        const group = document.createElement('details');
+        group.className = 'blog-group';
+        group.open = false;
+
+        const summary = document.createElement('summary');
+        summary.className = 'blog-group-summary';
+
+        const title = document.createElement('span');
+        title.className = 'blog-group-title';
+        title.textContent = getCategoryLabel(category);
+
+        const count = document.createElement('span');
+        count.className = 'blog-group-count';
+
+        const countLabel = document.createElement('span');
+        countLabel.className = 'blog-group-count-label';
+        countLabel.textContent = 'Amount of blogs';
+
+        const countValue = document.createElement('span');
+        countValue.className = 'blog-group-count-value';
+        countValue.textContent = `${postsInCategory.length}`;
+
+        count.appendChild(countLabel);
+        count.appendChild(countValue);
+
+        summary.appendChild(title);
+        summary.appendChild(count);
+        group.appendChild(summary);
+
+        const list = document.createElement('div');
+        list.className = 'blog-group-list';
+
+        const sortedPosts = sortPosts(postsInCategory, sortOrder);
+        sortedPosts.forEach(post => {
+            const entryBox = document.createElement('div');
+            entryBox.className = `entry-box blog-entry${post.pinned ? ' pinned-post' : ''}`;
+            if (post.pinned) {
+                const pinnedBadge = document.createElement('div');
+                pinnedBadge.className = 'pinned-badge';
+                pinnedBadge.textContent = '\uD83D\uDCCC Pinned';
+                entryBox.appendChild(pinnedBadge);
+            }
+
+            const entryDate = document.createElement('span');
+            entryDate.className = 'entry-date';
+            entryDate.textContent = formatDate(post.date);
+            entryBox.appendChild(entryDate);
+
+            const titleHeading = document.createElement('h3');
+            const titleLink = document.createElement('a');
+            titleLink.className = 'blog-title';
+            titleLink.href = `?post=${encodeURIComponent(post.id || '')}`;
+            titleLink.textContent = post.title || '';
+            titleHeading.appendChild(titleLink);
+            entryBox.appendChild(titleHeading);
+
+            const excerpt = document.createElement('p');
+            excerpt.textContent = post.excerpt || '';
+            entryBox.appendChild(excerpt);
+
+            const links = document.createElement('div');
+            links.className = 'blog-links';
+
+            const readMore = document.createElement('a');
+            readMore.className = 'read-more';
+            readMore.href = `?post=${encodeURIComponent(post.id || '')}`;
+            readMore.textContent = 'Read more';
+            links.appendChild(readMore);
+
+            const githubUrl = safeExternalUrl(post.githubUrl);
+            if (githubUrl) {
+                const githubLink = document.createElement('a');
+                githubLink.href = githubUrl;
+                githubLink.target = '_blank';
+                githubLink.rel = 'noopener noreferrer';
+                githubLink.className = 'github-link';
+                githubLink.textContent = 'View on GitHub';
+                links.appendChild(githubLink);
+            }
+
+            entryBox.appendChild(links);
+            list.appendChild(entryBox);
+        });
+
+        group.appendChild(list);
+        blogSection.appendChild(group);
     });
 }
 
-function filterPosts(posts, filter = 'all') {
-    if (filter === 'all') {
-        return posts;
+function groupPostsByCategory(posts) {
+    return posts.reduce((groups, post) => {
+        const category = post.category || 'random';
+        if (!groups[category]) {
+            groups[category] = [];
+        }
+        groups[category].push(post);
+        return groups;
+    }, {});
+}
+
+function getOrderedCategories(categories) {
+    const order = [
+        'pentesting',
+        'network',
+        'application-hacking',
+        'server-management',
+        'random'
+    ];
+
+    const ordered = order.filter(category => categories.includes(category));
+    const extras = categories
+        .filter(category => !order.includes(category))
+        .sort();
+
+    return [...ordered, ...extras];
+}
+
+function getCategoryLabel(category) {
+    const labels = {
+        'pentesting': 'Pentesting course',
+        'network': 'Network attacks and reconnaissance',
+        'application-hacking': 'Application hacking',
+        'server-management': 'Server management',
+        'random': 'Random'
+    };
+
+    if (labels[category]) {
+        return labels[category];
     }
-    return posts.filter(post => post.category === filter);
+
+    return category
+        .replace(/-/g, ' ')
+        .replace(/\b\w/g, char => char.toUpperCase());
 }
 
 function loadBlogPost(post, basePath) {
@@ -166,13 +262,13 @@ function loadBlogPost(post, basePath) {
         })
         .then(markdown => {
             // Clear the blog section
-            blogSection.innerHTML = '';
+            blogSection.replaceChildren();
             
             // Add back button
             const backLink = document.createElement('a');
             backLink.href = '.';  // Change from 'blog.html' to '.'
             backLink.className = 'back-link';
-            backLink.innerHTML = '&larr; Back to all posts';
+            backLink.textContent = '\u2190 Back to all posts';
             blogSection.appendChild(backLink);
             
             // Create post container
@@ -182,19 +278,33 @@ function loadBlogPost(post, basePath) {
             // Add post header
             const postHeader = document.createElement('div');
             postHeader.className = 'blog-post-header';
-            postHeader.innerHTML = `
-                <h1>${post.title}</h1>
-                <span class="entry-date">${formatDate(post.date)}</span>
-                ${post.githubUrl ? `<a href="${post.githubUrl}" target="_blank" rel="noopener noreferrer" class="github-link">View on GitHub</a>` : ''}
-            `;
+            const postTitle = document.createElement('h1');
+            postTitle.textContent = post.title || '';
+            postHeader.appendChild(postTitle);
+
+            const postDate = document.createElement('span');
+            postDate.className = 'entry-date';
+            postDate.textContent = formatDate(post.date);
+            postHeader.appendChild(postDate);
+
+            const postGithubUrl = safeExternalUrl(post.githubUrl);
+            if (postGithubUrl) {
+                const postGithubLink = document.createElement('a');
+                postGithubLink.href = postGithubUrl;
+                postGithubLink.target = '_blank';
+                postGithubLink.rel = 'noopener noreferrer';
+                postGithubLink.className = 'github-link';
+                postGithubLink.textContent = 'View on GitHub';
+                postHeader.appendChild(postGithubLink);
+            }
             
             // Add post content with file path and basePath for correct image handling
             const postContent = document.createElement('div');
             postContent.className = 'blog-post-content';
             
-            // Pass basePath to the convertMarkdownToHtml function
-            const htmlContent = convertMarkdownToHtml(markdown, post.file, basePath);
-            postContent.innerHTML = htmlContent;
+            // Pass basePath to the markdown renderer
+            const contentFragment = renderMarkdownToFragment(markdown, post.file, basePath);
+            postContent.appendChild(contentFragment);
             
             // Append everything to the container
             postContainer.appendChild(postHeader);
@@ -206,7 +316,7 @@ function loadBlogPost(post, basePath) {
         })
         .catch(error => {
             console.error('Error loading blog post:', error);
-            blogSection.innerHTML += `<p>Error loading blog post: ${error.message}. Please try again later.</p>`;
+            appendErrorNotice(blogSection, `Error loading blog post: ${error.message}. Please try again later.`);
         });
 }
 
@@ -259,48 +369,146 @@ function normalizeCategory(category) {
     }
     return lower;
 }
-function convertMarkdownToHtml(markdown, filePath = '', basePath = '') {
+
+function appendErrorNotice(container, message) {
+    if (!container) {
+        return;
+    }
+    const errorText = document.createElement('p');
+    errorText.textContent = message;
+    container.appendChild(errorText);
+}
+
+function safeExternalUrl(url) {
+    if (!url || typeof url !== 'string') {
+        return '';
+    }
+    try {
+        const parsed = new URL(url);
+        return parsed.protocol === 'https:' ? parsed.href : '';
+    } catch (error) {
+        return '';
+    }
+}
+
+function isSafeUrl(url, allowRelative = false) {
+    if (!url || typeof url !== 'string') {
+        return false;
+    }
+    const trimmed = url.trim();
+    if (allowRelative && (trimmed.startsWith('/') || trimmed.startsWith('./') || trimmed.startsWith('../') || trimmed.startsWith('#'))) {
+        return true;
+    }
+    if (/^mailto:/i.test(trimmed) || /^tel:/i.test(trimmed)) {
+        return true;
+    }
+    try {
+        const parsed = new URL(trimmed);
+        return parsed.protocol === 'http:' || parsed.protocol === 'https:';
+    } catch (error) {
+        return false;
+    }
+}
+
+function isExternalUrl(url) {
+    if (!url || typeof url !== 'string') {
+        return false;
+    }
+    try {
+        const parsed = new URL(url, window.location.origin);
+        return parsed.origin !== window.location.origin;
+    } catch (error) {
+        return false;
+    }
+}
+
+function sanitizeRenderedContent(fragment) {
+    fragment.querySelectorAll('script, iframe, object, embed, link, meta, style').forEach(node => node.remove());
+
+    fragment.querySelectorAll('*').forEach(node => {
+        Array.from(node.attributes).forEach(attribute => {
+            if (attribute.name.toLowerCase().startsWith('on')) {
+                node.removeAttribute(attribute.name);
+            }
+        });
+    });
+
+    fragment.querySelectorAll('a').forEach(link => {
+        const href = link.getAttribute('href');
+        if (!isSafeUrl(href, true)) {
+            link.removeAttribute('href');
+            return;
+        }
+        if (isExternalUrl(href)) {
+            link.setAttribute('rel', 'noopener noreferrer');
+            link.setAttribute('target', '_blank');
+        }
+    });
+
+    fragment.querySelectorAll('img').forEach(image => {
+        const src = image.getAttribute('src');
+        if (!isSafeUrl(src, true)) {
+            image.removeAttribute('src');
+        }
+        image.setAttribute('loading', 'lazy');
+    });
+}
+
+function renderMarkdownToFragment(markdown, filePath = '', basePath = '') {
     const md = window.markdownit({
-        html: true,
+        html: false,
         breaks: true,
         linkify: true,
         typographer: true
     });
-    
+    md.validateLink = function(url) {
+        return isSafeUrl(url, true);
+    };
+
     // Get the directory path from the filePath
     const dirPath = filePath.includes('/') 
         ? filePath.substring(0, filePath.lastIndexOf('/')) + '/' 
         : '';
-    
+
     // Override image renderer to handle paths correctly
-    const defaultImageRenderer = md.renderer.rules.image;
+    const defaultImageRenderer = md.renderer.rules.image || function(tokens, idx, options, env, self) {
+        return self.renderToken(tokens, idx, options);
+    };
     md.renderer.rules.image = function(tokens, idx, options, env, self) {
         const token = tokens[idx];
         const srcIndex = token.attrIndex('src');
         if (srcIndex >= 0) {
-            const src = token.attrs[srcIndex][1];
+            const src = token.attrs[srcIndex][1] || '';
+            let normalizedSrc = src;
             // Only prepend path if it's a relative path without / at the beginning
             if (!src.startsWith('/') && !src.startsWith('http')) {
                 // For images in subfolders, ensure correct path with basePath
-                token.attrs[srcIndex][1] = `${basePath}blogs/${dirPath}${src}`;
+                normalizedSrc = `${basePath}blogs/${dirPath}${src}`;
+                token.attrs[srcIndex][1] = normalizedSrc;
+            }
+            if (!isSafeUrl(normalizedSrc, true)) {
+                token.attrs[srcIndex][1] = '';
             }
         }
         return defaultImageRenderer(tokens, idx, options, env, self);
     };
-    
+
     // Custom renderer for code blocks to ensure proper overflow handling
     md.renderer.rules.code_block = function(tokens, idx, options, env) {
         const token = tokens[idx];
         return `<pre style="overflow-x: auto !important; white-space: pre !important; word-wrap: normal !important; max-width: 100% !important;"><code style="white-space: pre !important; word-wrap: normal !important;">${md.utils.escapeHtml(token.content)}</code></pre>`;
     };
-    
+
     md.renderer.rules.fence = function(tokens, idx, options, env, self) {
         const token = tokens[idx];
         const info = token.info ? md.utils.unescapeAll(token.info).trim() : '';
         const langName = info ? info.split(/\s+/g)[0] : '';
-        
+
         return `<pre style="overflow-x: auto !important; white-space: pre !important; word-wrap: normal !important; max-width: 100% !important;"><code${langName ? ` class="${options.langPrefix}${langName}"` : ''} style="white-space: pre !important; word-wrap: normal !important;">${md.utils.escapeHtml(token.content)}</code></pre>`;
     };
-    
-    return md.render(markdown);
+
+    const template = document.createElement('template');
+    template.innerHTML = md.render(markdown);
+    sanitizeRenderedContent(template.content);
+    return template.content;
 }
