@@ -396,8 +396,16 @@ function isSafeUrl(url, allowRelative = false) {
         return false;
     }
     const trimmed = url.trim();
-    if (allowRelative && (trimmed.startsWith('/') || trimmed.startsWith('./') || trimmed.startsWith('../') || trimmed.startsWith('#'))) {
-        return true;
+    if (allowRelative) {
+        if (trimmed.startsWith('/') || trimmed.startsWith('./') || trimmed.startsWith('../') || trimmed.startsWith('#') || trimmed.startsWith('?')) {
+            return true;
+        }
+
+        // Allow plain relative paths like "image.png" or "images/photo.jpg".
+        const hasScheme = /^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(trimmed);
+        if (!hasScheme && !trimmed.startsWith('//')) {
+            return true;
+        }
     }
     if (/^mailto:/i.test(trimmed) || /^tel:/i.test(trimmed)) {
         return true;
