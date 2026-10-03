@@ -1,55 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <link rel="icon" href="/pictures/mplogo.png" type="image/png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' https: data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests">
-    <title> Matti Pohjanoksa - Blog</title>
-    <meta name="description" content="Read Matti Pohjanoksa's blog posts about cybersecurity, technology, programming projects, and IT student experiences.">
-    <meta name="keywords" content="cybersecurity blog, tech blog, IT student blog, programming, Matti Pohjanoksa">
-    
-    <!-- Open Graph -->
-    <meta property="og:title" content="Blog - Matti Pohjanoksa | Cybersecurity & Tech Insights">
-    <meta property="og:description" content="Read blog posts about cybersecurity, technology, and programming by IT student Matti Pohjanoksa.">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' https: data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+    <title>Writing - Matti Pohjanoksa</title>
+
+    <meta name="description" content="Weekly write-ups from Matti Pohjanoksa's cybersecurity and server management courses: Kali, Metasploit, WiFi, Ansible and more.">
+    <meta name="author" content="Matti Pohjanoksa">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#f5f6f8">
+
+    <meta property="og:title" content="Writing - Matti Pohjanoksa">
+    <meta property="og:description" content="Write-ups from cybersecurity and server management courses by IT student Matti Pohjanoksa.">
+    <meta property="og:type" content="website">
     <meta property="og:url" content="https://matpohj.fi/blog/">
-    
+    <meta property="og:site_name" content="Matti Pohjanoksa">
+
     <link rel="canonical" href="https://matpohj.fi/blog/">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="/pictures/mplogo.png" type="image/png">
+
+    <link rel="preload" href="../fonts/bricolage-grotesque-latin-800-normal.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="../fonts/instrument-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="../css/style.css">
-    <script src="https://cdn.jsdelivr.net/npm/markdown-it@14.1.0/dist/markdown-it.min.js" integrity="sha384-wLhprpjsmjc/XYIcF+LpMxd8yS1gss6jhevOp6F6zhiIoFK6AmHtm4bGKtehTani" crossorigin="anonymous"></script>
 </head>
+
 <body>
-    <header>
-        <div class="container">
-            <nav>
-                <ul>
-                    <li><a href="../">home</a></li>
-                    <li><a href="." class="active">blog</a></li>
-                </ul>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header">
+        <div class="container header-inner">
+            <a class="brand" href="../">Matti Pohjanoksa</a>
+            <nav class="site-nav" aria-label="Main">
+                <a href="../#projects">Projects</a>
+                <a href="./" aria-current="page">Writing</a>
+                <a href="../#contact">Contact</a>
             </nav>
         </div>
     </header>
-    <main class="container">
-        <section id="blog">
-            <h1>Blog</h1>
-            <div class="sort-controls">
-                <label for="sort-select">Sort by date:</label>
-                <select id="sort-select">
-                    <option value="desc">Newest first</option>
-                    <option value="asc">Oldest first</option>
-                </select>
-            </div>
-            <!-- Blog posts will be loaded here dynamically -->
-            <div class="loading-spinner">Loading posts...</div>
-        </section>
+
+    <main id="main" class="container">
+        <header class="page-head" id="blog-head">
+            <div class="eyebrow">Notes &amp; write-ups from my courses</div>
+            <h1 class="page-title">Writing<span class="dot">.</span></h1>
+            <p class="page-lede">Weekly write-ups from my cybersecurity and server management courses, grouped by course.</p>
+        </header>
+
+        <div id="blog" aria-live="polite">
+            <p class="blog-status">Loading posts…</p>
+            <noscript><p class="blog-status">The blog needs JavaScript to load its posts. You can also read them on <a href="https://github.com/MatPohj/PersonalWebsite/tree/main/blogs">GitHub</a>.</p></noscript>
+        </div>
     </main>
-    <footer>
-        <p>&copy; 2026 Matti Pohjanoksa</p>
+
+    <footer class="site-footer">
+        <div class="container footer-inner">
+            <span>&copy; 2026 Matti Pohjanoksa</span>
+            <span class="footer-links">
+                <a href="https://www.linkedin.com/in/matti-pohjanoksa-01286222b/" target="_blank" rel="noopener noreferrer">LinkedIn <span aria-hidden="true">↗</span></a>
+                <a href="https://github.com/MatPohj" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+            </span>
+        </div>
     </footer>
-    <script src="../js/script.js"></script>
+
+    <script src="../js/vendor/markdown-it.min.js"></script>
     <script src="../js/blog.js"></script>
 </body>
+
 </html>

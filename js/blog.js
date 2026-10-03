@@ -1,12 +1,46 @@
-// Global variable to store all posts
-let allPosts = [];
-let currentSortOrder = 'desc';
+console.log("Why are you looking at my console?");
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Get base path for GitHub Pages compatibility
+/*
+ * Blog + course list.
+ * Loaded on the home page (course summary) and on /blog/ (course sections and
+ * single post view). All posts come from blogs/metadata.json, so adding a post
+ * only means adding a markdown file and one metadata entry.
+ */
+
+// Known courses: label and (optional) course repository.
+// The order on the page is decided by the newest post in each course.
+const COURSES = {
+    'server-management': {
+        label: 'Server Management',
+        repo: ''
+    },
+    'application-hacking': {
+        label: 'Application Hacking',
+        repo: 'https://github.com/MatPohj/Application-Hacking'
+    },
+    'network': {
+        label: 'Network Attacks and Reconnaissance',
+        repo: 'https://github.com/MatPohj/Network-Attacks-and-Reconnaissance-Autumn-25'
+    },
+    'pentesting': {
+        label: 'Penetration Testing',
+        repo: 'https://github.com/MatPohj/PenetrationTesting25S'
+    },
+    'random': {
+        label: 'General',
+        repo: ''
+    }
+};
+
+document.addEventListener('DOMContentLoaded', function () {
+    const blogRoot = document.getElementById('blog');
+    const courseList = document.getElementById('course-list');
+    if (!blogRoot && !courseList) {
+        return;
+    }
+
     const basePath = getBasePath();
-    
-    // Load the blog posts metadata with the correct relative path
+
     fetch(`${basePath}blogs/metadata.json`)
         .then(response => {
             if (!response.ok) {
@@ -14,245 +48,245 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             return response.json();
         })
-        .then(posts => {
-            // Enrich posts with category information for filtering
-            const categorizedPosts = posts.map(addCategoryToPost);
-            allPosts = categorizedPosts; // Store posts globally
-            displayBlogList(allPosts, currentSortOrder);
-            
-            // Set up sort functionality
-            setupSortControls();
-            
-            // Check if a specific blog post is requested via URL parameter
-            const urlParams = new URLSearchParams(window.location.search);
-            const postId = urlParams.get('post');
-            
-            if (postId) {
-                const post = posts.find(p => p.id === postId);
+        .then(rawPosts => {
+            const posts = rawPosts.map(addCategoryToPost);
+
+            if (courseList) {
+                renderCourseSummary(posts, courseList);
+            }
+
+            if (blogRoot) {
+                const postId = new URLSearchParams(window.location.search).get('post');
+                const post = postId ? posts.find(p => p.id === postId) : null;
                 if (post) {
-                    loadBlogPost(post, basePath);
+                    loadBlogPost(post, basePath, blogRoot);
+                } else {
+                    renderBlogIndex(posts, blogRoot);
+                    if (postId) {
+                        const note = el('p', 'blog-status', `Post "${postId}" was not found. Here is everything I have written so far.`);
+                        blogRoot.prepend(note);
+                    }
+                    scrollToHash();
                 }
             }
         })
         .catch(error => {
             console.error('Error loading blog posts:', error);
-            const blogSection = document.getElementById('blog');
-            appendErrorNotice(blogSection, `Error loading blog posts: ${error.message}`);
+            const target = blogRoot || courseList;
+            target.replaceChildren(el('p', 'blog-status', `Error loading blog posts: ${error.message}`));
         });
 });
 
-// Helper function to get the correct base path
+/* ---------- Helpers ---------- */
+
+function el(tag, className, text) {
+    const node = document.createElement(tag);
+    if (className) {
+        node.className = className;
+    }
+    if (text !== undefined && text !== null) {
+        node.textContent = text;
+    }
+    return node;
+}
+
 function getBasePath() {
     const path = window.location.pathname;
-    
-    // Check if we're in the blog directory
-    if (path.includes('/blog/') || path.endsWith('/blog')) {
-        return '../';
-    }
-    
-    // We're in the root directory
-    return './';
+    return (path.includes('/blog/') || path.endsWith('/blog')) ? '../' : './';
 }
 
-function setupSortControls() {
-    const sortSelect = document.getElementById('sort-select');
-    if (sortSelect) {
-        sortSelect.addEventListener('change', function() {
-            currentSortOrder = this.value;
-            displayBlogList(allPosts, currentSortOrder);
-        });
-    }
-}
-
-function sortPosts(posts, order = 'desc') {
-    // Separate pinned and regular posts
-    const pinnedPosts = posts.filter(post => post.pinned);
-    const regularPosts = posts.filter(post => !post.pinned);
-    
-    // Sort regular posts by date
-    const sortedRegularPosts = regularPosts.sort((a, b) => {
-        const dateA = new Date(a.date);
-        const dateB = new Date(b.date);
-        return order === 'desc' ? dateB - dateA : dateA - dateB;
-    });
-    
-    // Sort pinned posts by date (in case there are multiple)
-    const sortedPinnedPosts = pinnedPosts.sort((a, b) => {
-        const dateA = new Date(a.date);
-        const dateB = new Date(b.date);
-        return order === 'desc' ? dateB - dateA : dateA - dateB;
-    });
-    
-    // Return pinned posts first, then regular posts
-    return [...sortedPinnedPosts, ...sortedRegularPosts];
-}
-
-function displayBlogList(posts, sortOrder = 'desc') {
-    const blogSection = document.getElementById('blog');
-    if (!blogSection) {
+function scrollToHash() {
+    const id = decodeURIComponent(window.location.hash.slice(1));
+    if (!id) {
         return;
     }
-
-    // Remove existing blog groups and entries but keep title and controls
-    const existingGroups = blogSection.querySelectorAll('.blog-group');
-    existingGroups.forEach(group => group.remove());
-    const existingEntries = blogSection.querySelectorAll('.blog-entry');
-    existingEntries.forEach(entry => entry.remove());
-
-    // Remove the loading spinner if it exists
-    const spinner = document.querySelector('.loading-spinner');
-    if (spinner) {
-        spinner.remove();
+    const target = document.getElementById(id);
+    if (target) {
+        target.scrollIntoView();
     }
+}
 
-    const groupedPosts = groupPostsByCategory(posts);
-    const orderedCategories = getOrderedCategories(Object.keys(groupedPosts));
+function pad2(n) {
+    return n < 10 ? `0${n}` : `${n}`;
+}
 
-    orderedCategories.forEach(category => {
-        const postsInCategory = groupedPosts[category] || [];
-        if (!postsInCategory.length) {
-            return;
-        }
+function postUrl(post) {
+    return `?post=${encodeURIComponent(post.id || '')}`;
+}
 
-        const group = document.createElement('details');
-        group.className = 'blog-group';
-        group.open = false;
+// "h4 Pizza Fantasia" -> week 4, "Pizza Fantasia"
+// "Penetration testing h7, Maalisuoralla" -> week 7, "Maalisuoralla"
+function parseTitle(title) {
+    const raw = (title || '').trim();
+    const match = /^(?:penetration testing\s+)?h(\d+)\s*[:,]?\s*(.+)$/i.exec(raw);
+    if (!match) {
+        return { week: null, name: raw };
+    }
+    const name = match[2].charAt(0).toUpperCase() + match[2].slice(1);
+    return { week: Number(match[1]), name };
+}
 
-        const summary = document.createElement('summary');
-        summary.className = 'blog-group-summary';
+function newestFirst(a, b) {
+    return new Date(b.date) - new Date(a.date);
+}
 
-        const title = document.createElement('span');
-        title.className = 'blog-group-title';
-        title.textContent = getCategoryLabel(category);
+function getCourse(category) {
+    if (COURSES[category]) {
+        return COURSES[category];
+    }
+    const label = category.replace(/-/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
+    return { label, repo: '' };
+}
 
-        const count = document.createElement('span');
-        count.className = 'blog-group-count';
-
-        const countLabel = document.createElement('span');
-        countLabel.className = 'blog-group-count-label';
-        countLabel.textContent = 'Amount of blogs';
-
-        const countValue = document.createElement('span');
-        countValue.className = 'blog-group-count-value';
-        countValue.textContent = `${postsInCategory.length}`;
-
-        count.appendChild(countLabel);
-        count.appendChild(countValue);
-
-        summary.appendChild(title);
-        summary.appendChild(count);
-        group.appendChild(summary);
-
-        const list = document.createElement('div');
-        list.className = 'blog-group-list';
-
-        const sortedPosts = sortPosts(postsInCategory, sortOrder);
-        sortedPosts.forEach(post => {
-            const entryBox = document.createElement('div');
-            entryBox.className = `entry-box blog-entry${post.pinned ? ' pinned-post' : ''}`;
-            if (post.pinned) {
-                const pinnedBadge = document.createElement('div');
-                pinnedBadge.className = 'pinned-badge';
-                pinnedBadge.textContent = '\uD83D\uDCCC Pinned';
-                entryBox.appendChild(pinnedBadge);
-            }
-
-            const entryDate = document.createElement('span');
-            entryDate.className = 'entry-date';
-            entryDate.textContent = formatDate(post.date);
-            entryBox.appendChild(entryDate);
-
-            const titleHeading = document.createElement('h3');
-            const titleLink = document.createElement('a');
-            titleLink.className = 'blog-title';
-            titleLink.href = `?post=${encodeURIComponent(post.id || '')}`;
-            titleLink.textContent = post.title || '';
-            titleHeading.appendChild(titleLink);
-            entryBox.appendChild(titleHeading);
-
-            const excerpt = document.createElement('p');
-            excerpt.textContent = post.excerpt || '';
-            entryBox.appendChild(excerpt);
-
-            const links = document.createElement('div');
-            links.className = 'blog-links';
-
-            const readMore = document.createElement('a');
-            readMore.className = 'read-more';
-            readMore.href = `?post=${encodeURIComponent(post.id || '')}`;
-            readMore.textContent = 'Read more';
-            links.appendChild(readMore);
-
-            const githubUrl = safeExternalUrl(post.githubUrl);
-            if (githubUrl) {
-                const githubLink = document.createElement('a');
-                githubLink.href = githubUrl;
-                githubLink.target = '_blank';
-                githubLink.rel = 'noopener noreferrer';
-                githubLink.className = 'github-link';
-                githubLink.textContent = 'View on GitHub';
-                links.appendChild(githubLink);
-            }
-
-            entryBox.appendChild(links);
-            list.appendChild(entryBox);
-        });
-
-        group.appendChild(list);
-        blogSection.appendChild(group);
+// Groups non-pinned posts by category, newest course first.
+function groupCourses(posts) {
+    const groups = {};
+    posts.filter(post => !post.pinned).forEach(post => {
+        (groups[post.category] = groups[post.category] || []).push(post);
     });
+
+    return Object.keys(groups)
+        .map(category => {
+            const items = groups[category].sort(newestFirst);
+            const oldest = items[items.length - 1];
+            return {
+                category,
+                course: getCourse(category),
+                posts: items,
+                latest: items[0],
+                from: oldest.date,
+                to: items[0].date
+            };
+        })
+        .sort((a, b) => new Date(b.to) - new Date(a.to));
 }
 
-function groupPostsByCategory(posts) {
-    return posts.reduce((groups, post) => {
-        const category = post.category || 'random';
-        if (!groups[category]) {
-            groups[category] = [];
-        }
-        groups[category].push(post);
-        return groups;
-    }, {});
+function plural(n, word) {
+    return `${n} ${word}${n === 1 ? '' : 's'}`;
 }
 
-function getOrderedCategories(categories) {
-    const order = [
-        'pentesting',
-        'network',
-        'application-hacking',
-        'server-management',
-        'random'
-    ];
-
-    const ordered = order.filter(category => categories.includes(category));
-    const extras = categories
-        .filter(category => !order.includes(category))
-        .sort();
-
-    return [...ordered, ...extras];
+function year(dateString) {
+    return String(new Date(dateString).getFullYear());
 }
 
-function getCategoryLabel(category) {
-    const labels = {
-        'pentesting': 'Pentesting course',
-        'network': 'Network attacks and reconnaissance',
-        'application-hacking': 'Application hacking',
-        'server-management': 'Server management',
-        'random': 'Random'
-    };
+/* ---------- Home page: course summary ---------- */
 
-    if (labels[category]) {
-        return labels[category];
+function renderCourseSummary(posts, container) {
+    const courses = groupCourses(posts);
+    const rows = courses.map(group => {
+        const row = el('a', 'course-row');
+        row.href = `blog/#course-${group.category}`;
+
+        row.appendChild(el('span', 'course-count', plural(group.posts.length, 'post')));
+
+        const main = el('div', 'course-main');
+        main.appendChild(el('div', 'course-name', group.course.label));
+        main.appendChild(el('div', 'course-latest', `Latest: ${parseTitle(group.latest.title).name}`));
+        row.appendChild(main);
+
+        row.appendChild(el('span', 'course-range', `${group.from} → ${group.to}`));
+        return row;
+    });
+    container.replaceChildren(...rows);
+
+    const count = document.getElementById('writing-count');
+    if (count) {
+        count.textContent = `(${posts.length})`;
     }
-
-    return category
-        .replace(/-/g, ' ')
-        .replace(/\b\w/g, char => char.toUpperCase());
 }
 
-function loadBlogPost(post, basePath) {
-    const blogSection = document.getElementById('blog');
-    
-    // Fetch the markdown content with the correct path
+/* ---------- Blog page: index ---------- */
+
+function renderBlogIndex(posts, root) {
+    const head = document.getElementById('blog-head');
+    if (head) {
+        head.hidden = false;
+    }
+    document.title = 'Writing - Matti Pohjanoksa';
+
+    const frag = document.createDocumentFragment();
+
+    // Pinned posts
+    posts.filter(post => post.pinned).sort(newestFirst).forEach(post => {
+        const link = el('a', 'pinned');
+        link.href = postUrl(post);
+        link.appendChild(el('span', 'pinned-label', 'Pinned'));
+        link.appendChild(el('span', 'pinned-title', post.title || ''));
+        link.appendChild(el('span', 'pinned-date', post.date));
+        frag.appendChild(link);
+    });
+
+    const courses = groupCourses(posts);
+
+    // Jump grid
+    const grid = el('nav', 'jump-grid');
+    grid.setAttribute('aria-label', 'Courses');
+    courses.forEach((group, index) => {
+        const card = el('a', 'jump-card');
+        card.href = `#course-${group.category}`;
+        card.appendChild(el('span', 'jump-num', pad2(index + 1)));
+        card.appendChild(el('span', 'jump-name', group.course.label));
+        card.appendChild(el('span', 'jump-meta', `${plural(group.posts.length, 'post')} · ${year(group.to)}`));
+        grid.appendChild(card);
+    });
+    frag.appendChild(grid);
+
+    // Course sections
+    courses.forEach((group, index) => {
+        const section = el('section', 'course');
+        section.id = `course-${group.category}`;
+        section.setAttribute('aria-labelledby', `course-title-${group.category}`);
+
+        const side = el('div', 'course-side');
+        side.appendChild(el('span', 'section-num', pad2(index + 1)));
+        const heading = el('h2', '', group.course.label);
+        heading.id = `course-title-${group.category}`;
+        side.appendChild(heading);
+
+        const facts = el('div', 'course-facts');
+        facts.appendChild(document.createTextNode(plural(group.posts.length, 'post')));
+        facts.appendChild(document.createElement('br'));
+        facts.appendChild(document.createTextNode(`${group.from} → ${group.to}`));
+        side.appendChild(facts);
+
+        const repo = safeExternalUrl(group.course.repo);
+        if (repo) {
+            const repoLink = el('a', 'text-link', 'Course repo on GitHub ');
+            repoLink.href = repo;
+            repoLink.target = '_blank';
+            repoLink.rel = 'noopener noreferrer';
+            const arrow = el('span', '', '↗');
+            arrow.setAttribute('aria-hidden', 'true');
+            repoLink.appendChild(arrow);
+            side.appendChild(repoLink);
+        }
+        section.appendChild(side);
+
+        const list = el('ul', 'post-list');
+        group.posts.forEach(post => {
+            const item = el('li');
+            const row = el('a', 'post-row');
+            row.href = postUrl(post);
+
+            const parsed = parseTitle(post.title);
+            row.appendChild(el('span', 'post-week', parsed.week === null ? '—' : `H${parsed.week}`));
+            row.appendChild(el('span', 'post-title', parsed.name));
+            row.appendChild(el('span', 'post-date', post.date));
+
+            item.appendChild(row);
+            list.appendChild(item);
+        });
+        section.appendChild(list);
+
+        frag.appendChild(section);
+    });
+
+    root.replaceChildren(frag);
+}
+
+/* ---------- Blog page: single post ---------- */
+
+function loadBlogPost(post, basePath, root) {
     fetch(`${basePath}blogs/${post.file}`)
         .then(response => {
             if (!response.ok) {
@@ -261,62 +295,70 @@ function loadBlogPost(post, basePath) {
             return response.text();
         })
         .then(markdown => {
-            // Clear the blog section
-            blogSection.replaceChildren();
-            
-            // Add back button
-            const backLink = document.createElement('a');
-            backLink.href = '.';  // Change from 'blog.html' to '.'
-            backLink.className = 'back-link';
-            backLink.textContent = '\u2190 Back to all posts';
-            blogSection.appendChild(backLink);
-            
-            // Create post container
-            const postContainer = document.createElement('div');
-            postContainer.className = 'blog-post';
-            
-            // Add post header
-            const postHeader = document.createElement('div');
-            postHeader.className = 'blog-post-header';
-            const postTitle = document.createElement('h1');
-            postTitle.textContent = post.title || '';
-            postHeader.appendChild(postTitle);
-
-            const postDate = document.createElement('span');
-            postDate.className = 'entry-date';
-            postDate.textContent = formatDate(post.date);
-            postHeader.appendChild(postDate);
-
-            const postGithubUrl = safeExternalUrl(post.githubUrl);
-            if (postGithubUrl) {
-                const postGithubLink = document.createElement('a');
-                postGithubLink.href = postGithubUrl;
-                postGithubLink.target = '_blank';
-                postGithubLink.rel = 'noopener noreferrer';
-                postGithubLink.className = 'github-link';
-                postGithubLink.textContent = 'View on GitHub';
-                postHeader.appendChild(postGithubLink);
+            const head = document.getElementById('blog-head');
+            if (head) {
+                head.hidden = true;
             }
-            
-            // Add post content with file path and basePath for correct image handling
-            const postContent = document.createElement('div');
-            postContent.className = 'blog-post-content';
-            
-            // Pass basePath to the markdown renderer
-            const contentFragment = renderMarkdownToFragment(markdown, post.file, basePath);
-            postContent.appendChild(contentFragment);
-            
-            // Append everything to the container
-            postContainer.appendChild(postHeader);
-            postContainer.appendChild(postContent);
-            blogSection.appendChild(postContainer);
-            
-            // Update page title
-            document.title = `${post.title} - Matti Pohjanoksa's Blog`;
+
+            const parsed = parseTitle(post.title);
+            const course = getCourse(post.category);
+
+            const back = el('a', 'back-link', '← All writing');
+            back.href = '.';
+
+            const article = el('article', 'blog-post');
+
+            const header = el('header', 'post-header');
+            const eyebrowText = parsed.week === null
+                ? course.label
+                : `${course.label} · H${parsed.week}`;
+            header.appendChild(el('div', 'eyebrow', post.pinned ? 'Pinned' : eyebrowText));
+            header.appendChild(el('h1', '', parsed.name));
+
+            const meta = el('div', 'post-meta');
+            const time = el('time', '', formatDate(post.date));
+            time.dateTime = post.date;
+            meta.appendChild(time);
+
+            const githubUrl = safeExternalUrl(post.githubUrl);
+            if (githubUrl) {
+                const githubLink = el('a', 'text-link', 'View source on GitHub ');
+                githubLink.href = githubUrl;
+                githubLink.target = '_blank';
+                githubLink.rel = 'noopener noreferrer';
+                const arrow = el('span', '', '↗');
+                arrow.setAttribute('aria-hidden', 'true');
+                githubLink.appendChild(arrow);
+                meta.appendChild(githubLink);
+            }
+            header.appendChild(meta);
+
+            const content = el('div', 'post-content');
+            const rendered = renderMarkdownToFragment(markdown, post.file, basePath);
+
+            // Many posts start with their own title heading; the page header
+            // already shows it, so drop the duplicate.
+            const firstHeading = rendered.firstElementChild;
+            if (firstHeading && /^H[1-3]$/.test(firstHeading.tagName)) {
+                const text = firstHeading.textContent.toLowerCase();
+                if (text.includes(parsed.name.toLowerCase())) {
+                    firstHeading.remove();
+                }
+            }
+            content.appendChild(rendered);
+
+            article.appendChild(header);
+            article.appendChild(content);
+
+            root.replaceChildren(back, article);
+            document.title = `${parsed.name} - Matti Pohjanoksa`;
+            window.scrollTo(0, 0);
         })
         .catch(error => {
             console.error('Error loading blog post:', error);
-            appendErrorNotice(blogSection, `Error loading blog post: ${error.message}. Please try again later.`);
+            const back = el('a', 'back-link', '← All writing');
+            back.href = '.';
+            root.replaceChildren(back, el('p', 'blog-status', `Error loading blog post: ${error.message}. Please try again later.`));
         });
 }
 
@@ -324,6 +366,8 @@ function formatDate(dateString) {
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     return new Date(dateString).toLocaleDateString('en-US', options);
 }
+
+/* ---------- Categories ---------- */
 
 function addCategoryToPost(post) {
     const normalized = normalizeCategory(post.category);
@@ -370,14 +414,7 @@ function normalizeCategory(category) {
     return lower;
 }
 
-function appendErrorNotice(container, message) {
-    if (!container) {
-        return;
-    }
-    const errorText = document.createElement('p');
-    errorText.textContent = message;
-    container.appendChild(errorText);
-}
+/* ---------- URL safety ---------- */
 
 function safeExternalUrl(url) {
     if (!url || typeof url !== 'string') {
@@ -430,6 +467,8 @@ function isExternalUrl(url) {
     }
 }
 
+/* ---------- Markdown rendering ---------- */
+
 function sanitizeRenderedContent(fragment) {
     fragment.querySelectorAll('script, iframe, object, embed, link, meta, style').forEach(node => node.remove());
 
@@ -469,28 +508,25 @@ function renderMarkdownToFragment(markdown, filePath = '', basePath = '') {
         linkify: true,
         typographer: true
     });
-    md.validateLink = function(url) {
+    md.validateLink = function (url) {
         return isSafeUrl(url, true);
     };
 
-    // Get the directory path from the filePath
-    const dirPath = filePath.includes('/') 
-        ? filePath.substring(0, filePath.lastIndexOf('/')) + '/' 
+    // Directory of the post, so relative image paths resolve correctly
+    const dirPath = filePath.includes('/')
+        ? filePath.substring(0, filePath.lastIndexOf('/')) + '/'
         : '';
 
-    // Override image renderer to handle paths correctly
-    const defaultImageRenderer = md.renderer.rules.image || function(tokens, idx, options, env, self) {
+    const defaultImageRenderer = md.renderer.rules.image || function (tokens, idx, options, env, self) {
         return self.renderToken(tokens, idx, options);
     };
-    md.renderer.rules.image = function(tokens, idx, options, env, self) {
+    md.renderer.rules.image = function (tokens, idx, options, env, self) {
         const token = tokens[idx];
         const srcIndex = token.attrIndex('src');
         if (srcIndex >= 0) {
             const src = token.attrs[srcIndex][1] || '';
             let normalizedSrc = src;
-            // Only prepend path if it's a relative path without / at the beginning
             if (!src.startsWith('/') && !src.startsWith('http')) {
-                // For images in subfolders, ensure correct path with basePath
                 normalizedSrc = `${basePath}blogs/${dirPath}${src}`;
                 token.attrs[srcIndex][1] = normalizedSrc;
             }
@@ -501,19 +537,8 @@ function renderMarkdownToFragment(markdown, filePath = '', basePath = '') {
         return defaultImageRenderer(tokens, idx, options, env, self);
     };
 
-    // Custom renderer for code blocks to ensure proper overflow handling
-    md.renderer.rules.code_block = function(tokens, idx, options, env) {
-        const token = tokens[idx];
-        return `<pre style="overflow-x: auto !important; white-space: pre !important; word-wrap: normal !important; max-width: 100% !important;"><code style="white-space: pre !important; word-wrap: normal !important;">${md.utils.escapeHtml(token.content)}</code></pre>`;
-    };
-
-    md.renderer.rules.fence = function(tokens, idx, options, env, self) {
-        const token = tokens[idx];
-        const info = token.info ? md.utils.unescapeAll(token.info).trim() : '';
-        const langName = info ? info.split(/\s+/g)[0] : '';
-
-        return `<pre style="overflow-x: auto !important; white-space: pre !important; word-wrap: normal !important; max-width: 100% !important;"><code${langName ? ` class="${options.langPrefix}${langName}"` : ''} style="white-space: pre !important; word-wrap: normal !important;">${md.utils.escapeHtml(token.content)}</code></pre>`;
-    };
+    // Code blocks use markdown-it's default renderers (escaped, no inline
+    // styles). Scrolling and colors are handled in css/style.css.
 
     const template = document.createElement('template');
     template.innerHTML = md.render(markdown);
